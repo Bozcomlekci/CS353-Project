@@ -25,6 +25,7 @@ Syntax highlighted code block
 
 [Link](url) and ![Image](/assets/images/FoodOrderDeliverySystemERDiagram.png)
 ```
+![E/R Diagram](/assets/images/FoodOrderDeliverySystemERDiagram.png)
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 

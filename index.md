@@ -1,6 +1,6 @@
 # Food Delivery System
 
-[Link to the report](https://github.com/Bozcomlekci/CS353-Project/)
+![Link to the report](CS353Proposal.pdf)
 [Link to project site](https://github.com/Bozcomlekci/CS353-Project/)
 ![E/R Diagram](/assets/images/FoodOrderDeliverySystemERDiagram.png)
 

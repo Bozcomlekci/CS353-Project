@@ -1,12 +1,12 @@
 # Food Delivery System
 
-**Mustafa Goktan Gudukbay goktan.gudukbay@ug.bilkent.edu.tr**
+Mustafa Goktan Gudukbay goktan.gudukbay@ug.bilkent.edu.tr
 
-**Yusuf Ziya Ozgul  yzozgul98@gmail.com**
+Yusuf Ziya Ozgul  yzozgul98@gmail.com
 
-**Musa Ege Unalan egeunalan@gmail.com**
+Musa Ege Unalan egeunalan@gmail.com
 
-**Batuhan Ozcomlekci  b.ozcomlekci@ug.bilkent.edu.tr**
+Batuhan Ozcomlekci  b.ozcomlekci@ug.bilkent.edu.tr
 
 ## Project Description
 

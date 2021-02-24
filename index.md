@@ -2,13 +2,13 @@
 
 ## Contributors
 
-### Mustafa Goktan Gudukbay goktan.gudukbay@ug.bilkent.edu.tr
+Mustafa Goktan Gudukbay goktan.gudukbay@ug.bilkent.edu.tr
 
-### Yusuf Ziya Ozgul  yzozgul98@gmail.com
+Yusuf Ziya Ozgul  yzozgul98@gmail.com
 
-### Musa Ege Unalan egeunalan@gmail.com
+Musa Ege Unalan egeunalan@gmail.com
 
-### Batuhan Ozcomlekci  b.ozcomlekci@ug.bilkent.edu.tr
+Batuhan Ozcomlekci  b.ozcomlekci@ug.bilkent.edu.tr
 
 ## Project Description
 
@@ -17,7 +17,3 @@ The food ordering and delivery system will be an online application for customer
 [Link to the report](https://bozcomlekci.github.io/CS353-Project/CS353Proposal.pdf)
 
 ![E/R Diagram](/assets/images/FoodOrderDeliverySystemERDiagram.png)
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.

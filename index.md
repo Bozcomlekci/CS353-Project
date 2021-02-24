@@ -1,7 +1,9 @@
 # Food Delivery System
 
 ![Link to the report](CS353Proposal.pdf)
+
 [Link to project site](https://github.com/Bozcomlekci/CS353-Project/)
+
 ![E/R Diagram](/assets/images/FoodOrderDeliverySystemERDiagram.png)
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).

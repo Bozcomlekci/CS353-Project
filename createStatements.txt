@@ -1,0 +1,181 @@
+CREATE TABLE Item ( item_id SERIAL PRIMARY KEY, name VARCHAR, 
+					content VARCHAR, size VARCHAR, itemtype VARCHAR);
+
+
+CREATE TABLE Option_ ( name VARCHAR, PRIMARY KEY ( name ));
+
+
+CREATE TABLE Orders ( order_id SERIAL PRIMARY KEY, 
+                    status VARCHAR, order_time TIMESTAMP, 
+                    delivery_time TIMESTAMP, has_plastic BOOLEAN, note VARCHAR);
+
+
+CREATE TABLE Review ( review_id SERIAL PRIMARY KEY, delivery_rating FLOAT, restaurant_rating FLOAT, 
+                    restaurant_comment VARCHAR, delivery_comment VARCHAR, restaurant_response VARCHAR, 
+                    order_id INTEGER UNIQUE, 
+                    FOREIGN KEY (order_id) REFERENCES Orders(order_id));
+
+CREATE TABLE Address ( address_id SERIAL PRIMARY KEY, explanation VARCHAR, street VARCHAR, 
+                    street_number INTEGER, street_name INTEGER, apt_number INTEGER, city VARCHAR, 
+                    county VARCHAR, zip VARCHAR);
+
+
+CREATE TABLE Restaurant ( restaurant_id SERIAL PRIMARY KEY, name VARCHAR, money FLOAT, 
+                    average_rating FLOAT, is_open BOOLEAN, address_id INTEGER UNIQUE,
+					FOREIGN KEY(address_id) references Address(address_id));
+
+
+CREATE TABLE Orderable ( restaurant_id INTEGER, orderable_name VARCHAR, discount FLOAT, 
+                    price FLOAT, instock BOOLEAN, 
+                    PRIMARY KEY ( restaurant_id, orderable_name), 
+                    FOREIGN KEY (restaurant_id) REFERENCES Restaurant(restaurant_id));
+					
+
+CREATE TABLE Users ( username VARCHAR, first_name VARCHAR, 
+                    last_name VARCHAR, birthdate DATE, email VARCHAR, 
+                    password VARCHAR, PRIMARY KEY ( username ));
+
+CREATE TABLE DeliveryPerson (username VARCHAR , average_rating FLOAT, is_busy BOOLEAN,
+							PRIMARY KEY(username),
+							FOREIGN KEY (username) references Users(username));
+
+CREATE TABLE Customer ( username VARCHAR, credit FLOAT, 
+                    PRIMARY KEY ( username ), 
+                    FOREIGN KEY (username) REFERENCES Users (username));
+
+
+CREATE TABLE RestaurantOwner ( username VARCHAR, warning_count INTEGER, 
+                    PRIMARY KEY ( username ), 
+                    FOREIGN KEY (username) REFERENCES Users (username));
+
+
+CREATE TABLE SupportStaff ( username VARCHAR, rank INTEGER, is_free BOOLEAN, 
+                    PRIMARY KEY ( username ), 
+                    FOREIGN KEY (username) REFERENCES Users (username));
+
+
+CREATE TABLE SupportTicket ( ticket_id SERIAL PRIMARY KEY, date DATE, subject VARCHAR, 
+                    content VARCHAR, response VARCHAR);
+
+
+CREATE TABLE Phone ( phone_number VARCHAR, PRIMARY KEY ( phone_number ));
+
+
+CREATE TABLE Contain ( restaurant_id INTEGER, orderable_name VARCHAR, 
+                    item_id INTEGER, quantity INTEGER, 
+                    PRIMARY KEY ( restaurant_id, orderable_name, item_id ), 
+                    FOREIGN KEY (orderable_name, restaurant_id) references Orderable(orderable_name, restaurant_id), 
+                    FOREIGN KEY (item_id) references Item(item_id));
+
+
+CREATE TABLE HasOption ( restaurant_id INTEGER, option_name VARCHAR, 
+                    item_id INTEGER, 
+                    PRIMARY KEY ( restaurant_id, option_name, item_id ), 
+					FOREIGN KEY (restaurant_id ) references Restaurant (restaurant_id),
+                    FOREIGN KEY (option_name) references Option_(name), 
+                    FOREIGN KEY (item_id) references Item(item_id));
+					
+
+CREATE TABLE Specify ( item_id INTEGER, option_name VARCHAR, 
+                    order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, item_index INTEGER, exists BOOLEAN, 
+                    PRIMARY KEY ( item_id, option_name, order_id, restaurant_id, orderable_name, item_index ), 
+                    FOREIGN KEY (item_id) references Item(item_id), 
+                    FOREIGN KEY (option_name) references Option_(name),
+					FOREIGN KEY (order_id) references Orders(order_id),
+					FOREIGN KEY (orderable_name, restaurant_id) references Orderable(orderable_name, restaurant_id));
+
+
+CREATE TABLE ConsistOf (order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, quantity INTEGER,
+						PRIMARY KEY (order_id, restaurant_id, orderable_name),
+						FOREIGN KEY (order_id) references Orders (order_id),
+						FOREIGN KEY (orderable_name, restaurant_id) references Orderable(orderable_name, restaurant_id));
+						
+						
+CREATE TABLE HasReview ( restaurant_id INTEGER, review_id INTEGER,
+						PRIMARY KEY(review_id),
+						FOREIGN KEY (restaurant_id) references Restaurant (restaurant_id),
+						FOREIGN KEY (review_id) references Review (review_id));
+						
+CREATE TABLE CompleteOrder (order_id INTEGER, username VARCHAR, restaurant_id INTEGER,
+							PRIMARY KEY(order_id),
+							FOREIGN KEY(username) references Customer(username),
+							FOREIGN KEY(restaurant_id) references Restaurant(restaurant_id),
+							FOREIGN KEY(order_id) references Orders(order_id));
+
+CREATE TABLE SeeReview(review_id INTEGER, username VARCHAR,
+						PRIMARY KEY (review_id),
+						FOREIGN KEY (review_id) references Review(review_id),
+						FOREIGN KEY (username) references DeliveryPerson (username));
+						
+CREATE TABLE HasAddress(address_id INTEGER, username VARCHAR, name VARCHAR,
+						PRIMARY KEY(address_id),
+						FOREIGN KEY(username) references Customer(username),
+						FOREIGN KEY(address_id) references Address(address_id));
+	
+
+/* datei time a degistirelim, time de primary key olmucak mi?*/	
+CREATE TABLE IssueWarning (support_staff_username VARCHAR, restaurant_owner_username VARCHAR, issue_time TIMESTAMP,
+							PRIMARY KEY(support_staff_username, restaurant_owner_username, issue_time),
+							FOREIGN KEY(support_staff_username) references SupportStaff(username),
+							FOREIGN KEY(restaurant_owner_username) references RestaurantOwner(username));
+
+
+CREATE TABLE AssignedToTicket(ticket_id INTEGER, username VARCHAR,
+								PRIMARY KEY(ticket_id),
+								FOREIGN KEY(username) references SupportStaff(username),
+								FOREIGN KEY(ticket_id) references SupportTicket(ticket_id));
+
+
+CREATE TABLE SubmitTicket(ticket_id INTEGER, username VARCHAR,
+								PRIMARY KEY(ticket_id, username),
+								FOREIGN KEY(username) references Customer(username),
+								FOREIGN KEY(ticket_id) references SupportTicket(ticket_id));
+
+CREATE TABLE HasTicket(ticket_id INTEGER, order_id INTEGER,
+								PRIMARY KEY(ticket_id, order_id),
+								FOREIGN KEY(order_id) references Orders(order_id),
+								FOREIGN KEY(ticket_id) references SupportTicket(ticket_id));
+
+
+CREATE TABLE Favorite(username VARCHAR, restaurant_id INTEGER,
+								PRIMARY KEY(username, restaurant_id),
+								FOREIGN KEY(username) references Customer(username),
+								FOREIGN KEY(restaurant_id) references Restaurant(restaurant_id));
+
+
+CREATE TABLE Contact(username VARCHAR, phone_number VARCHAR, name VARCHAR,
+					PRIMARY KEY(username, phone_number),
+					FOREIGN KEY(username) references Customer(username),
+					FOREIGN KEY(phone_number) references Phone(phone_number));
+					
+					
+CREATE TABLE RestaurantContact(restaurant_id INTEGER, phone_number VARCHAR,
+					PRIMARY KEY(restaurant_id, phone_number),
+					FOREIGN KEY(restaurant_id) references Restaurant(restaurant_id),
+					FOREIGN KEY(phone_number) references Phone(phone_number));
+
+CREATE TABLE Owns(restaurant_id INTEGER, username VARCHAR,
+					PRIMARY KEY(restaurant_id),
+					FOREIGN KEY(restaurant_id) references Restaurant(restaurant_id),
+					FOREIGN KEY(username) references RestaurantOwner(username));
+
+CREATE TABLE CreateReview(review_id INTEGER, username VARCHAR,
+					PRIMARY KEY(review_id),
+					FOREIGN KEY(review_id) references Review(review_id),
+					FOREIGN KEY(username) references Customer(username));
+
+CREATE TABLE RequestForDelivery(username VARCHAR, order_id INTEGER, acceptance BOOLEAN,
+					PRIMARY KEY(username, order_id),
+					FOREIGN KEY(username) references DeliveryPerson(username),
+					FOREIGN KEY(order_id) references Orders(order_id));
+
+CREATE TABLE DeliveredBy(order_id INTEGER, username VARCHAR,
+					PRIMARY KEY(order_id),
+					FOREIGN KEY(order_id) references Orders(order_id),
+					FOREIGN KEY(username) references DeliveryPerson(username));
+
+CREATE TABLE DeliveredTo(order_id INTEGER, address_id INTEGER,
+					PRIMARY KEY(order_id),
+					FOREIGN KEY(address_id) references Address(address_id),
+					FOREIGN KEY(order_id) references Orders(order_id));
+

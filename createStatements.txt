@@ -7,7 +7,7 @@ CREATE TABLE Option_ ( name VARCHAR, PRIMARY KEY ( name ));
 
 CREATE TABLE Orders ( order_id SERIAL PRIMARY KEY, 
                     status VARCHAR, order_time TIMESTAMP, 
-                    delivery_time TIMESTAMP, has_plastic BOOLEAN, note VARCHAR);
+                    delivery_time TIMESTAMP, has_plastic BIT, note VARCHAR);
 
 
 CREATE TABLE Review ( review_id SERIAL PRIMARY KEY, delivery_rating FLOAT, restaurant_rating FLOAT, 
@@ -21,12 +21,12 @@ CREATE TABLE Address ( address_id SERIAL PRIMARY KEY, explanation VARCHAR, stree
 
 
 CREATE TABLE Restaurant ( restaurant_id SERIAL PRIMARY KEY, name VARCHAR, money FLOAT, 
-                    average_rating FLOAT, is_open BOOLEAN, address_id INTEGER UNIQUE,
+                    average_rating FLOAT, is_open BIT, address_id INTEGER UNIQUE,
 					FOREIGN KEY(address_id) references Address(address_id));
 
 
 CREATE TABLE Orderable ( restaurant_id INTEGER, orderable_name VARCHAR, discount FLOAT, 
-                    price FLOAT, instock BOOLEAN, 
+                    price FLOAT, instock BIT, 
                     PRIMARY KEY ( restaurant_id, orderable_name), 
                     FOREIGN KEY (restaurant_id) REFERENCES Restaurant(restaurant_id));
 					
@@ -35,7 +35,7 @@ CREATE TABLE Users ( username VARCHAR, first_name VARCHAR,
                     last_name VARCHAR, birthdate DATE, email VARCHAR, 
                     password VARCHAR, PRIMARY KEY ( username ));
 
-CREATE TABLE DeliveryPerson (username VARCHAR , average_rating FLOAT, is_busy BOOLEAN,
+CREATE TABLE DeliveryPerson (username VARCHAR , average_rating FLOAT, is_busy BIT,
 							PRIMARY KEY(username),
 							FOREIGN KEY (username) references Users(username));
 
@@ -49,7 +49,7 @@ CREATE TABLE RestaurantOwner ( username VARCHAR, warning_count INTEGER,
                     FOREIGN KEY (username) REFERENCES Users (username));
 
 
-CREATE TABLE SupportStaff ( username VARCHAR, rank INTEGER, is_free BOOLEAN, 
+CREATE TABLE SupportStaff ( username VARCHAR, rank INTEGER, is_free BIT, 
                     PRIMARY KEY ( username ), 
                     FOREIGN KEY (username) REFERENCES Users (username));
 
@@ -77,7 +77,7 @@ CREATE TABLE HasOption ( restaurant_id INTEGER, option_name VARCHAR,
 					
 
 CREATE TABLE Specify ( item_id INTEGER, option_name VARCHAR, 
-                    order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, item_index INTEGER, exists BOOLEAN, 
+                    order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, item_index INTEGER, exists BIT, 
                     PRIMARY KEY ( item_id, option_name, order_id, restaurant_id, orderable_name, item_index ), 
                     FOREIGN KEY (item_id) references Item(item_id), 
                     FOREIGN KEY (option_name) references Option_(name),
@@ -164,7 +164,7 @@ CREATE TABLE CreateReview(review_id INTEGER, username VARCHAR,
 					FOREIGN KEY(review_id) references Review(review_id),
 					FOREIGN KEY(username) references Customer(username));
 
-CREATE TABLE RequestForDelivery(username VARCHAR, order_id INTEGER, acceptance BOOLEAN,
+CREATE TABLE RequestForDelivery(username VARCHAR, order_id INTEGER, acceptance BIT,
 					PRIMARY KEY(username, order_id),
 					FOREIGN KEY(username) references DeliveryPerson(username),
 					FOREIGN KEY(order_id) references Orders(order_id));

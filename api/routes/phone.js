@@ -40,7 +40,7 @@ getRestaurantPhone = (request, response) => {
       if (err) {
         return console.error('Error acquiring client', err.stack)
       }
-      client.query('SELECT * FROM Contact where restaurant-id = $1', [restaurant_id], (err, result) => {
+      client.query('SELECT * FROM RestaurantContact where restaurant_id = $1', [restaurant_id], (err, result) => {
         release()
         if (err) {
           return console.error('Error executing query', err.stack)

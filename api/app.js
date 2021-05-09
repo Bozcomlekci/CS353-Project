@@ -11,6 +11,11 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var loggedinRouter = require('./routes/loggedin');
 var logoutRouter = require('./routes/logout');
+var signupRouter = require('./routes/signup');
+var reviewRouter = require('./routes/review');
+var userInfoRouter = require('./routes/userInfo');
+
+
 
 var app = express();
 
@@ -35,8 +40,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.post('/login', loginRouter);
+app.post('/signup', signupRouter);
 app.get('/loggedin', loggedinRouter);
 app.get('/logout', logoutRouter);
+app.post('/review/write', reviewRouter.writeReviewRouter);
+app.get('/review/get', reviewRouter.getReviewRouter);
+app.get('/review/list', reviewRouter.listReviewsRouter);
+app.get('/userInfo', userInfoRouter.getUserInfoRouter);
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

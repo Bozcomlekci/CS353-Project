@@ -17,20 +17,69 @@ login = (request, response) => {
         return console.error('Error acquiring client', err.stack)
       }
       client.query('SELECT * FROM Users where username = $1 and password = $2', [username, password], (err, result) => {
-        release()
+        
         if (err) {
-          return console.error('Error executing query', err.stack)
+          response.status(401).send("Login Unsuccessful");
         }
   
         if (result.rows.length == 1) {
-          sess.user = {username: username}
+
+          console.log("ADS");
           sess.loggedIn = true;
+          sess.user = {username: username}
+
+          //find user type
+          //check customer
+          client.query('SELECT * FROM Customer where username = $1', [username], (err1, result1) => {
+            if(err1){
+            }
+            
+            if(result1.rows.length == 1){
+              sess.user.type = "Customer";
+              response.send(sess);              }
+          });
+
+
+          //check restaurant owner
+          client.query('SELECT * FROM RestaurantOwner where username = $1', [username], (err1, result1) => {
+            if(err1){
+            }
+            
+            if(result1.rows.length == 1){
+              sess.user.type = "RestaurantOwner";
+              response.send(sess);           
+             }
+          });
+          
+
+          //check support staff
+          client.query('SELECT * FROM SupportStaff where username = $1', [username], (err1, result1) => {
+            if(err1){
+            }
+            
+            if(result1.rows.length == 1){
+              sess.user.type = "SupportStaff";
+              response.send(sess);
+            }
+          });
+
+
+          //check delivery person
+          client.query('SELECT * FROM DeliveryPerson where username = $1', [username], (err1, result1) => {
+            if(err1){
+            }
+            
+            if(result1.rows.length == 1){
+              sess.user.type = "DeliveryPerson";
+              response.send(sess);
+            }
+          });    
         }
         else {
           sess.loggedIn = false;
         }
-        response.send(sess);
       })
+
     });
   }
   else {

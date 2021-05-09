@@ -84,7 +84,7 @@ writeReview = (request, response) => {
                     else {
                         username = result.rows[0].username;
 
-                        client.query('INSERT INTO CreateReview VALUES($1, $2)', [newlyInsertedReviewId, username], (err2, result2) => {
+                        client.query('INSERT INTO SeeReview VALUES($1, $2)', [newlyInsertedReviewId, username], (err2, result2) => {
                             if(err2){
                                 response.status(401).send("Add Review Unsuccessful");
                             }

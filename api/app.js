@@ -14,7 +14,7 @@ var logoutRouter = require('./routes/logout');
 var signupRouter = require('./routes/signup');
 var reviewRouter = require('./routes/review');
 var userInfoRouter = require('./routes/userInfo');
-
+var supportRouter = require('./routes/support');
 
 var restaurantRouter = require('./routes/restaurant');
 
@@ -52,6 +52,13 @@ app.get('/restaurant/list_orderables', restaurantRouter.listOrderables);
 app.get('/restaurant/list_restaurants', restaurantRouter.listRestaurants);
 app.get('/restaurant/get_options', restaurantRouter.getOptionsForItem);
 app.post('/restaurant/add_item', restaurantRouter.addItem);
+
+app.post('/support/writeticket', supportRouter.writeTicketRouter);
+app.get('/support/getticket', supportRouter.getTicketRouter);
+app.get('/support/assignTicket', supportRouter.assignTicketRouter);
+app.get('/support/warn', supportRouter.issueWarningRouter);
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

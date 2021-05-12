@@ -30,7 +30,7 @@ writeReview = (request, response) => {
               }
 
               else {//diger tablolara da eklencek order id lazim ve has reviews tablosu creat review delivery review
-                newlyInsertedReviewId = result.review_id;
+                newlyInsertedReviewId = result.rows[0].review_id;
 
                 //has review
                 //get restaurant id for the order

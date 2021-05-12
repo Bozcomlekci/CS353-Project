@@ -207,6 +207,12 @@ async function addRecords() {
         await client.query("INSERT INTO Hasoption VALUES ('1', 'bbq sauce', '1');");
         await client.query("INSERT INTO Option_ VALUES ('cheese');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'cheese', '1');");
+
+
+        await client.query("INSERT INTO Users VALUES ('Joe', 'Joe', 'Joe', '2016-03-03', 'Joe@gmail.com', 'Joe');");
+        await client.query("INSERT INTO RestaurantOwner VALUES ('Joe', 0);");
+        await client.query("INSERT INTO Users VALUES ('ABC', 'ABC', 'ABC', '2016-03-03', 'ABC@gmail.com', 'ABC');");
+        await client.query("INSERT INTO SupportStaff VALUES ('ABC', 1, true);");
     } catch (err) {
         console.log(err.stack);
     }

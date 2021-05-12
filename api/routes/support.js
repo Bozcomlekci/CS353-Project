@@ -7,7 +7,6 @@ const getPool = require('../db');
 var pool = getPool();
 
 writeTicket = (request, response) => {
-    ticket_id = request.body.ticket_id;
     date = request.body.date;
     subject = request.body.subject;
     content = request.body.content;
@@ -15,28 +14,33 @@ writeTicket = (request, response) => {
     type = request.body.type;
     
 
-    if (type.localeCompare("Customers") == 0) {
-        pool.query("INSERT INTO SupportTickets VALUES($1, $2, $3, $4, NULL)", [ticket_id, date, subject, content], (error, result) => {
+    if (type.localeCompare("Customer") == 0) {
+        pool.query("INSERT INTO SupportTicket VALUES(DEFAULT, $1, $2, $3, NULL) RETURNING ticket_id", [date, subject, content], (error, result) => {
             if (error) {
                 response.status(401).send("Error Creating Support Ticket");
             }
             else {
-                pool.query("INSERT INTO SubmitTicket VALUES($1, $2)", [ticket_id, username], (error1, result) => {
+                console.log(result.rows);
+                newlyInsertedTicketId = result.rows[0].ticket_id;
+                pool.query("INSERT INTO SubmitTicket VALUES($1, $2)", [newlyInsertedTicketId, username], (error1, result) => {
                     if (error1) {
+                        console.log(newlyInsertedTicketId);
+
                         response.status(401).send("Error Creating Support Ticket");
                     }
                     else {
                         response.status(200).send("Support Ticket Successfully Created");
-                        assignTicket(request, response); // May want to call later
+                        //assignTicket(request, response); // May want to call later
+                        assignTicket(newlyInsertedTicketId); // May want to call later
                     }
                 } )
-                response.status(200).send("Error Creating Support Ticket");
+                //response.status(200).send("Error Creating Support Ticket");
             }
         } )
     }
     else {
         supportResponse = request.body.supportResponse;
-        pool.query("UPDATE SupportTickets SET response = $1 WHERE EXISTS(SELECT * FROM AssignedToTicket NATURAL JOIN SupportTicket WHERE response = NULL AND username = $2)",
+        pool.query("UPDATE SupportTicket SET response = $1 WHERE EXISTS(SELECT * FROM AssignedToTicket NATURAL JOIN SupportTicket WHERE response = NULL AND username = $2)",
             [supportResponse, username], (error, result) => {
                 if (error) {
                     response.status(401).send("Error Creating Support Ticket")
@@ -48,24 +52,25 @@ writeTicket = (request, response) => {
     }
 }
 
-assignTicket = (request, response) => {
-    username = request.body.username;
-    pool.query("SELECT FIRST(username) FROM SupportStaff WHERE is_free = 1", (error1, freeSupport) => {
+//assignTicket = (request, response) => {
+assignTicket = (ticket_id) => {
+    pool.query("SELECT FIRST(username) FROM SupportStaff WHERE is_free = true", (error1, freeSupport) => {
         if (error1) {
-            response.status(401).send("Error Assigning Support Ticket")
+            console.log(error1);
+            //response.status(401).send("Error Assigning Support Ticket")
         }
         else {
-            pool.query("UPDATE SupportStaff SET is_free = 0 WHERE username = $1", [freeSupport], (error2, result2) => {
+            pool.query("UPDATE SupportStaff SET is_free = false WHERE username = $1", [freeSupport.rows[0].username], (error2, result2) => {
                 if (error2) {
-                    response.status(401).send("Error Assigning Support Ticket")
+                    //response.status(401).send("Error Assigning Support Ticket")
                 }
                 else {
-                    pool.query("INSERT INTO AssignedToTicket VALUES($1, $2)", [ticket_id, freeSupport], (error3, result3) => {
+                    pool.query("INSERT INTO AssignedToTicket VALUES($1, $2)", [ticket_id, freeSupport.rows[0].username], (error3, result3) => {
                         if (error3) {
-                            response.status(401).send("Error Assigning Support Ticket")
+                            //response.status(401).send("Error Assigning Support Ticket")
                         }
                         else {
-                            response.status(200).send("Support Ticket Successfully Assigned");
+                            //response.status(200).send("Support Ticket Successfully Assigned");
                         }
                     })
                 }
@@ -75,29 +80,31 @@ assignTicket = (request, response) => {
 }
 
 getTicket = (request, response) => {
-    ticket_id = request.body.ticket_id;
-    pool.query("SELECT * FROM SupportTickets WHERE ticked_id = $1", [ticket_id], (error, result) => {
+    ticket_id = request.query.ticket_id;
+    pool.query("SELECT * FROM SupportTicket WHERE ticket_id = $1", [ticket_id], (error, result) => {
         if (error) {
+            console.log(error);
             response.status(401).send("Error Returning Support Ticket")
         }
         else {
-            response.status(200).send("Support Ticket Successfully Retrieved");
-            return result;
+            response.status(200).send(result.rows);
         }
     })
 }
 
 issueWarning = (request, response) => {
-    username = request.body.username;
-    ownername = request.body.ownername;
-    issue_time = request.body.issue_time;
+    username = request.query.username;
+    ownername = request.query.ownername;
+    issue_time = request.query.issue_time;
     pool.query("INSERT INTO IssueWarning VALUES($1, $2, $3)", [username, ownername, issue_time], (error, result) => {
         if (error) {
+            console.log(error);
             response.status(401).send("Error Issuing Warning")
         }
         else {
-            pool.query("UPDATE RestaurantOwner SET warning_count = warning_count + 1 WHERE username = ownername", [ownername], (error2, result2) => {
+            pool.query("UPDATE RestaurantOwner SET warning_count = warning_count + 1 WHERE username = $1", [ownername], (error2, result2) => {
                 if (error2) {
+                    console.log(error2);
                     response.status(401).send("Error Issuing Warning")
                 }
                 else {

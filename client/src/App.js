@@ -5,6 +5,9 @@ import Navbar from './components/Navbar';
 import HomePageNotLoggedIn from './HomepageNotLoggedIn';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AddressBox from './components/AddressBox';
+import Restaurant from './components/Restaurant';
+import RestaurantList from './components/RestaurantList';
+import SimpleModal from './components/SimpleModal';
 
 class App extends React.Component {
   constructor(props) {
@@ -72,6 +75,19 @@ class App extends React.Component {
             </Route>
             <Route exact path="/box">
               <h1>BOX</h1>
+            </Route>
+            <Route exact path="/add_option">
+              <h1>ADD OPTION</h1>
+            </Route>
+            <Route exact path="/restaurants/">
+              <RestaurantList/>
+            </Route>
+            <Route exact path="/restaurants/1">
+              <Restaurant restaurant_id={1}/>
+            </Route>
+
+            <Route exact path="/modal">
+              <SimpleModal />
             </Route>
             <Route path="/">
               <div>

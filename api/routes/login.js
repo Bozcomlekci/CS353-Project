@@ -74,6 +74,7 @@ login = (request, response) => {
               response.send(sess);
             }
           });    
+          sess.box = [];
         }
         else {
           sess.loggedIn = false;

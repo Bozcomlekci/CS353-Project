@@ -30,6 +30,7 @@ class Navbar extends React.Component {
     return (
       <nav>
         <a href="/">YemekKutusu</a>
+        <a href="/restaurants/">Restaurants</a>
         <a href="/addresses">Addresses</a>
         <a href="/B">Orders</a>
         <a href="/box">Box</a>

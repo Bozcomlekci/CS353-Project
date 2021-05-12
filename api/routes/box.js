@@ -6,18 +6,46 @@ var updateBoxRouter = express.Router();
 const getPool = require('../db');
 
 getBox = (request, response) => {
-
+  response.send(request.session.box);
 }
 
 addToBox = (request, response) => {
-
+    // check if options are
+    // quantity
 }
 
 removeFromBox = (request, response) => {
-
+  let box = request.session.box;
+  let index = request.query.index;
+  if (box.length > index) {
+    box.splice(index, 1);
+    response.sendStatus(200);
+  }
+  else {
+    response.sendStatus(403);
+  }
+    // index
 }
 
-updateBox = (request, response) => {
+updateItemQuantity = (request, response) => {
+  // index, quantity
+  // less than 0 no
+  // if 0 remove
+  let box = request.session.box;
+  let index = request.query.index;
+  let qty = request.query.quantity;
+  if (box.length > index && qty >= 0) {
+    if (qty == 0) {
+      box.splice(index, 1);
+    }
+    else {
+      box[index].quantity = qty;
+    }
+    response.sendStatus(200);
+  }
+  else {
+    response.sendStatus(403);
+  }
 
 }
 

@@ -16,6 +16,7 @@ var reviewRouter = require('./routes/review');
 var userInfoRouter = require('./routes/userInfo');
 
 
+var restaurantRouter = require('./routes/restaurant');
 
 var app = express();
 
@@ -47,10 +48,10 @@ app.post('/review/write', reviewRouter.writeReviewRouter);
 app.get('/review/get', reviewRouter.getReviewRouter);
 app.get('/review/list', reviewRouter.listReviewsRouter);
 app.get('/userInfo', userInfoRouter.getUserInfoRouter);
-
-
-
-
+app.get('/restaurant/list_orderables', restaurantRouter.listOrderables);
+app.get('/restaurant/list_restaurants', restaurantRouter.listRestaurants);
+app.get('/restaurant/get_options', restaurantRouter.getOptionsForItem);
+app.post('/restaurant/add_item', restaurantRouter.addItem);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

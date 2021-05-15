@@ -15,12 +15,14 @@ var signupRouter = require('./routes/signup');
 var reviewRouter = require('./routes/review');
 var userInfoRouter = require('./routes/userInfo');
 var supportRouter = require('./routes/support');
+var boxRouter = require('./routes/box');
 
 var addressRouter = require('./routes/address');
 console.log(addressRouter);
 
 
 
+var orderRouter = require('./routes/order');
 var restaurantRouter = require('./routes/restaurant');
 
 var app = express();
@@ -62,6 +64,13 @@ app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);
 app.get('/support/assignTicket', supportRouter.assignTicketRouter);
 app.get('/support/warn', supportRouter.issueWarningRouter);
+
+app.post('/box/add', boxRouter.addToBoxRouter);
+app.get('/box/get', boxRouter.getBoxRouter);
+app.get('/box/remove', boxRouter.removeFromBoxRouter);
+app.get('/box/update', boxRouter.updateBoxRouter);
+
+app.post('/order/create', orderRouter.createOrderRouter);
 
 
 app.get('/address/customer', addressRouter.getCustomerAddressRouter);

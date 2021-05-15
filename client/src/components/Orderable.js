@@ -47,6 +47,8 @@ function getModalStyle() {
 export default function Orderable(props) {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
+  const [quantity, setQuantity] = React.useState(1);
+  const [selected, setSelected] = React.useState(Array(props.orderable.items.length).fill('None'));
 
   const handleOpen = () => {
     console.log(15455454);
@@ -56,6 +58,20 @@ export default function Orderable(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChange = (event) => {
+    console.log(event);
+    console.log();
+    let newSelected = selected;
+    for (let i = 0; i < props.orderable.items.length; i++) {
+      if (props.orderable.items[i].name == event.target.attributes['1'].nodeValue) {
+        newSelected[i] = event.target.value;
+        setSelected(newSelected);
+        break;
+      }
+    }
+    console.log(selected);
+  }
 
   const classes = useStyles();
 
@@ -70,8 +86,50 @@ export default function Orderable(props) {
     return result;
   }
 
-  function addOrderableToBox() {
-    alert("ADD TO BOX HERE IN THE CODE");
+  async function addOrderableToBox() {
+    setOpen(false);
+    console.log(props.orderable);
+    let orderable = {
+      restaurant_id: props.restaurant_id,
+      orderable_name: props.orderable.orderable_name,
+      quantity: quantity,
+      options: selected
+    };
+    await axios.post('http://localhost:9000/box/add', {
+      orderable
+    }, {withCredentials: true});
+    /*const sess = await axios.post('http://localhost:9000/box/add', {
+      orderable
+    }, {withCredentials: true})
+    .then((res) => {
+      console.log(res);
+    }, (err) => {
+      console.error(err);
+    });
+    */
+
+  }
+  
+
+  function optionButtons(item) {
+    let options = [];
+    options.push(<FormControlLabel value='None' control={<Radio/>} label='None' />)
+    for (let i = 0; i < item.options.length; i++) {
+      let option = item.options[i];
+      options.push(<FormControlLabel value={option} control={<Radio/>} label={option} />)
+    }
+    return options
+  }
+
+  function items() {
+    let items = [];
+    console.log("LERLERLERLELRE", props.orderable.items);
+    for (let i = 0; i < props.orderable.items.length; i++) {
+      let item = props.orderable.items[i];
+      items.push(<FormLabel component="legend">{item.name}</FormLabel>);
+      items.push(<RadioGroup defaultValue='None' aria-label={item.name} name={item.name} onChange={handleChange}>{optionButtons(item)}</RadioGroup>);
+    }
+    return items;
   }
 
   const body = (
@@ -81,12 +139,9 @@ export default function Orderable(props) {
         Item, options, quantity.
       </p>
       <FormControl component="fieldset">
-        <RadioGroup aria-label="gender" name="gender1">
-          <FormControlLabel value="female" control={<Radio />} label="Female" />
-          <FormControlLabel value="male" control={<Radio />} label="Male" />
-          <FormControlLabel value="other" control={<Radio />} label="Other" />
-        </RadioGroup>
+        {items()}
       </FormControl>
+      <TextField type="number" value={quantity} onChange={(e) => setQuantity(Math.max(e.target.value,0))}/>
       <Button onClick={() => addOrderableToBox()}>ADD TO BOX</Button>
       <Button onClick={() => handleClose()}>CLOSE</Button>
     </div>

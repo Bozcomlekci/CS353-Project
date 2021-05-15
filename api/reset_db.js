@@ -207,6 +207,10 @@ async function addRecords() {
         await client.query("INSERT INTO Hasoption VALUES ('1', 'bbq sauce', '1');");
         await client.query("INSERT INTO Option_ VALUES ('cheese');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'cheese', '1');");
+        await client.query("INSERT INTO Option_ VALUES ('normal');");
+        await client.query("INSERT INTO Option_ VALUES ('zero');");
+        await client.query("INSERT INTO Hasoption VALUES ('1', 'normal', '2');");
+        await client.query("INSERT INTO Hasoption VALUES ('1', 'zero', '2');");
 
 
         await client.query("INSERT INTO Users VALUES ('Joe', 'Joe', 'Joe', '2016-03-03', 'Joe@gmail.com', 'Joe');");

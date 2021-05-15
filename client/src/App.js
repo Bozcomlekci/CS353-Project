@@ -7,8 +7,14 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AddressBox from './components/AddressBox';
 import Restaurant from './components/Restaurant';
 import RestaurantList from './components/RestaurantList';
+<<<<<<< Updated upstream
 import Signup from './components/Signup';
 
+=======
+import Box from './components/Box';
+import FinalizeOrder from './components/FinalizeOrder';
+import HomePage from './components/HomePage';
+>>>>>>> Stashed changes
 
 class App extends React.Component {
   constructor(props) {
@@ -88,10 +94,13 @@ class App extends React.Component {
               <AddressBox/>
             </Route>
             <Route exact path="/box">
-              <h1>BOX</h1>
+              <Box/>
             </Route>
             <Route exact path="/add_option">
               <h1>ADD OPTION</h1>
+            </Route>
+            <Route exact path="/finalize_order">
+              <FinalizeOrder/>
             </Route>
             <Route exact path="/restaurants/">
               <RestaurantList/>
@@ -102,9 +111,7 @@ class App extends React.Component {
               <Restaurant restaurant_id={1}/>
             </Route>
             <Route path="/">
-              <div>
-                <h1>LOGGED IN</h1>
-              </div>
+              <HomePage user = {this.state.user}/>
             </Route>
           </Switch>
         </Router>

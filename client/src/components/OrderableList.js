@@ -33,7 +33,7 @@ export default function OrderableList(props) {
   function renderOrderables() {
       let rendered = [];
       for (const orderable of orderables) {
-        rendered.push(<Orderable orderable={orderable}/>)
+        rendered.push(<Orderable orderable={orderable} restaurant_id={props.restaurant_id}/>)
       }
       return rendered;
   }

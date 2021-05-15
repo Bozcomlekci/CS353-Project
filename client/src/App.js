@@ -7,14 +7,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AddressBox from './components/AddressBox';
 import Restaurant from './components/Restaurant';
 import RestaurantList from './components/RestaurantList';
-<<<<<<< Updated upstream
 import Signup from './components/Signup';
 
-=======
 import Box from './components/Box';
 import FinalizeOrder from './components/FinalizeOrder';
 import HomePage from './components/HomePage';
->>>>>>> Stashed changes
 
 class App extends React.Component {
   constructor(props) {
@@ -105,8 +102,6 @@ class App extends React.Component {
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
-          
-
             <Route exact path="/restaurants/1">
               <Restaurant restaurant_id={1}/>
             </Route>

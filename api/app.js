@@ -16,6 +16,11 @@ var reviewRouter = require('./routes/review');
 var userInfoRouter = require('./routes/userInfo');
 var supportRouter = require('./routes/support');
 
+var addressRouter = require('./routes/address');
+console.log(addressRouter);
+
+
+
 var restaurantRouter = require('./routes/restaurant');
 
 var app = express();
@@ -57,6 +62,11 @@ app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);
 app.get('/support/assignTicket', supportRouter.assignTicketRouter);
 app.get('/support/warn', supportRouter.issueWarningRouter);
+
+
+app.get('/address/customer', addressRouter.getCustomerAddressRouter);
+app.post('/address/customer', addressRouter.addCustomerAddressRouter);
+app.get('/address/restaurant', addressRouter.getRestaurantAddressRouter);
 
 
 // catch 404 and forward to error handler

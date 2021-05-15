@@ -14,8 +14,7 @@ writeReview = (request, response) => {
     order_id = request.body.order_id;
 
     let sess = request.session;
-    if(!sess.loggedIn){// to be changed
-        console.log("MERhaba");
+    if(sess.loggedIn){// to be changed
 
         let pool = getPool();
         pool.connect((err, client, release) => {
@@ -107,7 +106,7 @@ getReview = (request, response) => {
 
     order_id = request.params.order_id;
     let sess = request.session;
-    if(!sess.loggedIn){// to be changed
+    if(sess.loggedIn){
         let pool = getPool();
         pool.connect((err, client, release) => {
             if (err) {
@@ -140,7 +139,7 @@ getRestaurantReviews = (request, response) => {
     
     restaurant_id = request.params.restaurant_id;
     let sess = request.session;
-    if(!sess.loggedIn){//to be changed
+    if(sess.loggedIn){
         let pool = getPool();
         pool.connect((err, client, release) => {
             if (err) {

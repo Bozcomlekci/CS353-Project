@@ -22,9 +22,7 @@ login = (request, response) => {
           response.status(401).send("Login Unsuccessful");
         }
   
-        if (result.rows.length == 1) {
-
-          console.log("ADS");
+        else if (result.rows.length == 1) {
           sess.loggedIn = true;
           sess.user = {username: username}
 
@@ -38,7 +36,6 @@ login = (request, response) => {
               sess.user.type = "Customer";
               response.send(sess);              }
           });
-
 
           //check restaurant owner
           client.query('SELECT * FROM RestaurantOwner where username = $1', [username], (err1, result1) => {
@@ -74,9 +71,9 @@ login = (request, response) => {
               response.send(sess);
             }
           });    
-          sess.box = [];
         }
         else {
+          response.status(401).send("Login Unsuccessful");
           sess.loggedIn = false;
         }
       })

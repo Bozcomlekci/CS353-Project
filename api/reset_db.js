@@ -42,7 +42,7 @@ async function createTables() {
                     FOREIGN KEY (order_id) REFERENCES Orders(order_id));`);
 
         await client.query(`CREATE TABLE Address ( address_id SERIAL PRIMARY KEY, explanation VARCHAR, street VARCHAR, 
-                    street_number INTEGER, street_name INTEGER, apt_number INTEGER, city VARCHAR, 
+                    street_number INTEGER, street_name VARCHAR, apt_number INTEGER, city VARCHAR, 
                     county VARCHAR, zip VARCHAR);`);
 
         await client.query(`CREATE TABLE Restaurant ( restaurant_id SERIAL PRIMARY KEY, name VARCHAR, money FLOAT, 
@@ -198,7 +198,7 @@ async function addRecords() {
         await client.query("INSERT INTO Customer VALUES ('admin', 200);");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'burger', 'patty', 'normal', 'food');");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'cola', '1 can', '330 ml', 'beverage');");
-        await client.query("INSERT INTO Address VALUES ('1', 'bk address', 'jump street', '21', '99', '21', 'ankara', 'cankaya', '06000');");
+        await client.query("INSERT INTO Address VALUES (DEFAULT, 'bk address', 'jump street', '21', '99', '21', 'ankara', 'cankaya', '06000');");
         await client.query("INSERT INTO Restaurant VALUES ('1', 'bk', '0', '8.5', true, '1');");
         await client.query("INSERT INTO Orderable VALUES ('1', 'burger menu', '0', '20', 'true');");
         await client.query("INSERT INTO Contain VALUES ('1', 'burger menu', '1', '1');");

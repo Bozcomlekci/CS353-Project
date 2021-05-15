@@ -38,18 +38,30 @@ writeTicket = (request, response) => {
             }
         } )
     }
-    else {
+    else if(type.localeCompare("SupportStaff") == 0){
         supportResponse = request.body.supportResponse;
         pool.query("UPDATE SupportTicket SET response = $1 WHERE EXISTS(SELECT * FROM AssignedToTicket NATURAL JOIN SupportTicket WHERE response = NULL AND username = $2)",
             [supportResponse, username], (error, result) => {
                 if (error) {
-                    response.status(401).send("Error Creating Support Ticket")
+                        response.status(401).send("Error Answering Support Ticket")
                 }
                 else {
-                    response.status(200).send("Response Sent for the Support Ticket");
+                    pool.query("UPDATE SupportStaff SET is_free = true WHERE username=$1",
+                    [username], (error, result) => {
+                        if (error) {
+                            response.status(401).send("Error Freeing Support Staff")
+                        }
+                        else {
+                            response.status(200).send("Response Sent for the Support Ticket");
+                        }
+                    })
                 }
             })
     }
+    else {
+        response.status(401).send("Wrong User Type for SupportTicket")
+    }
+
 }
 
 //assignTicket = (request, response) => {

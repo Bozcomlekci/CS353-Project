@@ -19,6 +19,8 @@ signup = (request, response) => {
     birthdate = request.body.birthdate;
     email = request.body.email;
     password = request.body.password;
+
+    console.log(username, first_name, last_name, birthdate, email, password);
     
     client.query("INSERT INTO Users VALUES($1, $2, $3, $4, $5, $6)", 
     [username, first_name, last_name, birthdate, email, password], (err, result) => {

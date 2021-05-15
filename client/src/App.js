@@ -7,7 +7,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AddressBox from './components/AddressBox';
 import Restaurant from './components/Restaurant';
 import RestaurantList from './components/RestaurantList';
-import SimpleModal from './components/SimpleModal';
+import Signup from './components/Signup';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -61,7 +62,20 @@ class App extends React.Component {
   render = () => {
     if (!this.state.loggedIn) {
       return (
-        <HomePageNotLoggedIn loggedIn = {this.state.loggedIn} onLogin = {(l) => this.onAuthChange(l)}/>
+        
+        <Router>
+         <Switch>
+          <Route exact path="/signup/">
+              <Signup/>
+            </Route>
+
+            <Route exact path="/">
+            <HomePageNotLoggedIn loggedIn = {this.state.loggedIn} onLogin = {(l) => this.onAuthChange(l)}/>
+            </Route>
+
+            </Switch>
+        </Router>
+        
       );
     }
     else {
@@ -82,12 +96,10 @@ class App extends React.Component {
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
+          
+
             <Route exact path="/restaurants/1">
               <Restaurant restaurant_id={1}/>
-            </Route>
-
-            <Route exact path="/modal">
-              <SimpleModal />
             </Route>
             <Route path="/">
               <div>

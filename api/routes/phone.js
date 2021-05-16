@@ -31,8 +31,7 @@ getCustomerPhone = (request, response) => {
 
 getRestaurantPhone = (request, response) => {
   sess = request.session;
-  type = sess.user.type;
-  if(sess.loggedIn && (type.localeCompare("RestaurantOwner") == 0)){
+  if(sess.loggedIn){
     restaurant_id = request.query.restaurant_id;
     
   

@@ -2,6 +2,7 @@ var express = require('express');
 var writeReviewRouter = express.Router();
 var getReviewRouter = express.Router();
 var listReviewsRouter = express.Router();
+var responseRouter = express.Router();
 const getPool = require('../db');
 
 
@@ -38,7 +39,8 @@ writeReview = (request, response) => {
                         response.status(401).send("Add Review Unsuccessful");
                     }
                     else {
-                        restaurant_id = result.rows[0].restaurant_id;
+                        restaurant_id = result1.rows[0].restaurant_id;
+                        console.log("alo",restaurant_id);
                         client.query('INSERT INTO HasReview VALUES($1, $2)', [restaurant_id, newlyInsertedReviewId], (err2, result2) => {
                             if(err2){
                                 response.status(401).send("Add Review Unsuccessful");
@@ -104,7 +106,7 @@ writeReview = (request, response) => {
 
 getReview = (request, response) => {
 
-    order_id = request.params.order_id;
+    order_id = request.query.order_id;
     let sess = request.session;
     if(sess.loggedIn){
         let pool = getPool();
@@ -112,32 +114,29 @@ getReview = (request, response) => {
             if (err) {
               return console.error('Error acquiring client', err.stack)
             }
-            client.query('SELECT R.name, R.average_rating, address.street, address.street_number, address.street_name, '
-            + 'address.apt_number, address.city, address.county, address.zip, R.average_rating, Rev.restaurant_comment, '
-            + 'Rev.delivery_comment, Rev.restaurant_rating, Rev.delivery_rating, Rev.restaurant_response '
-            + 'FROM Restaurant R, Address address, Review Rev, CompleteOrder CompOrder '
-            + 'WHERE Rev.order_id = $1 AND CompOrder.order_id = Rev.order_id  AND CompOrder.restaurant_id = R.restaurant_id '
-            + 'AND R.address_id = address.address_id', [order_id], (err, result) => {
-              
-              if (err) {
-                  console.log(err);
-                response.status(401).send("See Review Unsuccessful");
-              }
-
-              else  {
-                response.status(200).json(result.rows);
-              }
-            })
+            else{
+                client.query('SELECT R.name, R.average_rating, address.street, address.street_number, address.street_name, '
+                + 'address.apt_number, address.city, address.county, address.zip, R.average_rating, Rev.restaurant_comment, '
+                + 'Rev.delivery_comment, Rev.restaurant_rating, Rev.delivery_rating, Rev.restaurant_response '
+                + 'FROM Restaurant R, Address address, Review Rev, CompleteOrder CompOrder '
+                + 'WHERE Rev.order_id = $1 AND CompOrder.order_id = Rev.order_id  AND CompOrder.restaurant_id = R.restaurant_id '
+                + 'AND R.address_id = address.address_id', [order_id], (err, result) => {
+                  
+                  if (err) {
+                    response.status(401).send("See Review Unsuccessful");
+                  }
+                  else  {    
+                    response.status(200).json(result.rows);
+                  }
+                })
+            }       
         })
-    } 
-    else {
-        response.status(401).send("Not logged in.")
     }     
 }
 
 getRestaurantReviews = (request, response) => {
     
-    restaurant_id = request.params.restaurant_id;
+    restaurant_id = request.query.restaurant_id;
     let sess = request.session;
     if(sess.loggedIn){
         let pool = getPool();
@@ -145,10 +144,10 @@ getRestaurantReviews = (request, response) => {
             if (err) {
               return console.error('Error acquiring client', err.stack)
             }
-            client.query('SELECT Rev.review-id, Rev.delivery-rating, Rev.restaurant-rating, Rev.restaurant-comment,'
-            + 'Rev.delivery-comment, Rev.restaurant-response'
-           + 'FROM HasReview HRev NATURAL JOIN Review Rev'
-           + 'WHERE @restaurant-id = HRev.restaurant-id', [restaurant_id], (err, result) => {
+            client.query('SELECT Rev.review_id, Rev.delivery_rating, Rev.restaurant_rating, Rev.restaurant_comment, '
+            + 'Rev.delivery_comment, Rev.restaurant_response '
+           + 'FROM HasReview HRev NATURAL JOIN Review Rev '
+           + 'WHERE HRev.restaurant_id = $1', [restaurant_id], (err, result) => {
               
               if (err) {
                 response.status(401).send("List Reviews Unsuccessful");
@@ -165,11 +164,44 @@ getRestaurantReviews = (request, response) => {
     }   
 }
 
+restaurantWriteResponse = (request, response) => {
+    let sess = request.session;
+    if(sess.loggedIn){
+        let pool = getPool();
+        pool.connect((err, client, release) => {
+            if (err) {
+              return console.error('Error acquiring client', err.stack)
+            }
+            else{
+                review_id = request.body.review_id;
+                restaurant_response = request.body.restaurant_response;
+
+                console.log(request.body);
+                client.query('UPDATE Review SET restaurant_response = $1 where review_id = $2', [restaurant_response, review_id], (err, result) => {
+                  
+                  if (err) {
+                    response.status(401).send("Insert Response Unsuccessful");
+                  }
+    
+                  else {
+                    response.status(200).send("Insert Response Succesful");
+                  }
+            })
+        }
+    })
+    
+    }
+}
+
+
+
 writeReviewRouter.post('/review/write', writeReview);
 getReviewRouter.get('/review/get', getReview);
 listReviewsRouter.get('/review/list', getRestaurantReviews);
+responseRouter.post('/review/response', restaurantWriteResponse);
 module.exports = {
     writeReviewRouter,
     getReviewRouter,
-    listReviewsRouter
+    listReviewsRouter,
+    responseRouter
 };

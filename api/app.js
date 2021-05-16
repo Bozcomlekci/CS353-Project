@@ -57,6 +57,9 @@ app.get('/logout', logoutRouter);
 app.post('/review/write', reviewRouter.writeReviewRouter);
 app.get('/review/get', reviewRouter.getReviewRouter);
 app.get('/review/list', reviewRouter.listReviewsRouter);
+app.post('/review/response', reviewRouter.responseRouter);
+
+
 app.get('/userInfo', userInfoRouter.getUserInfoRouter);
 app.get('/restaurant/list_orderables', restaurantRouter.listOrderablesRouter);
 app.get('/restaurant/list_restaurants', restaurantRouter.listRestaurantsRouter);

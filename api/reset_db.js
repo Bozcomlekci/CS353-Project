@@ -33,7 +33,7 @@ async function createTables() {
         await client.query(`CREATE TABLE Option_ ( name VARCHAR, PRIMARY KEY ( name ));`);
 
         await client.query(`CREATE TABLE Orders ( order_id SERIAL PRIMARY KEY, 
-                    status VARCHAR, order_time TIMESTAMP, 
+                    status VARCHAR, order_time TIMESTAMP, time_to_deliver TIMESTAMP, 
                     delivery_time TIMESTAMP, has_plastic BOOLEAN, note VARCHAR);`);
 
         await client.query(`CREATE TABLE Review ( review_id SERIAL PRIMARY KEY, delivery_rating FLOAT, restaurant_rating FLOAT, 
@@ -206,12 +206,10 @@ async function addRecords() {
         await client.query("INSERT INTO Option_ VALUES ('hot sauce');");
         await client.query("INSERT INTO Option_ VALUES ('bbq sauce');");
         await client.query("INSERT INTO Option_ VALUES ('cheese');");
-        await client.query("INSERT INTO Option_ VALUES ('normal');");
         await client.query("INSERT INTO Option_ VALUES ('zero');");
         await client.query("INSERT INTO Option_ VALUES ('cherry');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'bbq sauce', '1');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'cheese', '1');");
-        await client.query("INSERT INTO Hasoption VALUES ('1', 'normal', '2');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'zero', '2');");
         
         
@@ -228,7 +226,6 @@ async function addRecords() {
         await client.query("INSERT INTO Hasoption VALUES ('2', 'hot sauce', '3');");
         await client.query("INSERT INTO Hasoption VALUES ('2', 'hot sauce', '4');");
         await client.query("INSERT INTO Hasoption VALUES ('2', 'cheese', '3');");
-        await client.query("INSERT INTO Hasoption VALUES ('2', 'normal', '2');");
         await client.query("INSERT INTO Hasoption VALUES ('2', 'cherry', '2');");
 
 
@@ -238,6 +235,8 @@ async function addRecords() {
         await client.query("INSERT INTO Owns VALUES (2, 'Joe');");
         await client.query("INSERT INTO Users VALUES ('ABC', 'ABC', 'ABC', '2016-03-03', 'ABC@gmail.com', 'ABC');");
         await client.query("INSERT INTO SupportStaff VALUES ('ABC', 1, true);");
+        await client.query("INSERT INTO Users VALUES ('Delivery1', 'Delivery1', 'Delivery1', '2016-03-03', 'Delivery1@gmail.com', 'Delivery1');");
+        await client.query("INSERT INTO DeliveryPerson VALUES ('Delivery1', 10, false);");
     } catch (err) {
         console.log(err.stack);
     }

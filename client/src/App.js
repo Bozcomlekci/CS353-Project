@@ -13,6 +13,7 @@ import Box from './components/Box';
 import FinalizeOrder from './components/FinalizeOrder';
 import CustomerHomePage from './components/CustomerHomePage';
 import OwnerHomePage from './components/OwnerHomePage';
+import DeliveryHomePage from './components/DeliveryHomePage';
 
 class App extends React.Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class App extends React.Component {
     } else if (user.type == "SupportStaff") {
       
     } else if (user.type == "DeliveryPerson") {
-      
+      return <DeliveryHomePage user={user}/>;
     }
 
   }

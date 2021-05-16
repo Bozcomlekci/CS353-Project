@@ -66,6 +66,7 @@ app.post('/restaurant/add_item', restaurantRouter.addItemRouter);
 
 app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);
+app.get('/support/listtickets', supportRouter.listTicketRouter);
 app.get('/support/assignTicket', supportRouter.assignTicketRouter);
 app.get('/support/warn', supportRouter.issueWarningRouter);
 

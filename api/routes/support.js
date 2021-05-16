@@ -1,4 +1,5 @@
 var express = require('express');
+var listTicketRouter = express.Router();
 var writeTicketRouter = express.Router();
 var getTicketRouter = express.Router();
 var issueWarningRouter = express.Router();
@@ -64,7 +65,6 @@ writeTicket = (request, response) => {
 
 }
 
-//assignTicket = (request, response) => {
 assignTicket = (ticket_id) => {
     pool.query("SELECT FIRST(username) FROM SupportStaff WHERE is_free = true", (error1, freeSupport) => {
         if (error1) {
@@ -96,13 +96,41 @@ getTicket = (request, response) => {
     pool.query("SELECT * FROM SupportTicket WHERE ticket_id = $1", [ticket_id], (error, result) => {
         if (error) {
             console.log(error);
-            response.status(401).send("Error Returning Support Ticket")
+            response.status(401).send("Error Returning Support Ticket");
         }
         else {
             response.status(200).send(result.rows);
         }
     })
 }
+
+listTickets = (request, response) => {
+    username = request.body.username;
+    if( type.localeCompare("Customer") == 0 ) {
+        pool.query("SELECT * FROM SubmitTicket WHERE username = $1", [username], (error, result) => {
+            if (error) {
+                response.status(401).send("Error Listing Support Tickets");
+            }
+            else {
+                response.status(200).send(result.rows);
+            }
+        });
+    }
+    else if( type.localeCompare("SupportStaff") == 0 ) {
+        pool.query("SELECT * FROM RespondTicket WHERE username = $1", [username], (error, result) => {
+            if (error) {
+                response.status(401).send("Error Listing Support Tickets");
+            }
+            else {
+                response.status(200).send(result.rows);
+            }
+        });
+    }
+    else {
+        response.status(401).send("The user type is not authorized for tickets");
+    }
+}
+
 
 issueWarning = (request, response) => {
     username = request.query.username;
@@ -127,12 +155,15 @@ issueWarning = (request, response) => {
     })
 }
 
+
+writeTicketRouter.post('/support/listtickets', listTicket);
 writeTicketRouter.post('/support/writeticket', writeTicket);
 getTicketRouter.get('/support/getticket', getTicket);
 issueWarningRouter.get('/support/warn', issueWarning);
 assignTicketRouter.get('/support/assignTicket', assignTicket);
 
 module.exports = {
+    listTicketRouter,
     writeTicketRouter,
     getTicketRouter,
     issueWarningRouter,

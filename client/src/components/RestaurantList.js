@@ -29,7 +29,15 @@ export default function RestaurantList(props) {
   function renderRestaurants() {
       let rendered = [];
       for (const restaurant of restaurants) {
-        rendered.push(<a href={"./" + restaurant.restaurant_id}>{restaurant.name}</a>)
+        rendered.push(
+        <div>
+          <a href={"./" + restaurant.restaurant_id}>{restaurant.name}</a>
+          <div>Rating:{restaurant.average_rating}</div>
+          <div>Open:{String(restaurant.is_open)}</div>
+          <div>City:{restaurant.city}</div>
+          <div>County:{restaurant.county}</div>
+        </div>
+        )
       }
       return rendered;
   }

@@ -1,5 +1,8 @@
 var express = require('express');
 var getUserInfoRouter = express.Router();
+var getRestaurantOfOwnerRotuer = express.Router();
+var setCurrentlyManagedRestaurantRouter = express.Router();
+var getCurrentlyManagedRestaurantRouter = express.Router();
 const getPool = require('../db');
 
 getInfo = (request, response) => {
@@ -97,7 +100,33 @@ getInfo = (request, response) => {
     }   
 }
 
+getRestaurantsOfOwner = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+          return console.error('Error acquiring client', err.stack)
+        }
+        client.query('SELECT * FROM Owns NATURAL JOIN Restaurant  WHERE username = $1', [request.session.user.username], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.send(result.rows);
+        })
+      });
+}
+
+setCurrentlyManagedRestaurant = (request, response) => {
+    request.session.user.restaurant = request.body.restaurant;
+    response.send(request.session.user.restaurant);
+}
+
+
 getUserInfoRouter.get('/userInfo', getInfo);
+getRestaurantOfOwnerRotuer.get('/userInfo/restaurants', getRestaurantsOfOwner);
+setCurrentlyManagedRestaurantRouter.post('/userInfo/set_current_restaurant', setCurrentlyManagedRestaurant);
 module.exports = {
     getUserInfoRouter,
+    getRestaurantOfOwnerRotuer,
+    setCurrentlyManagedRestaurantRouter
 };

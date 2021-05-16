@@ -40,7 +40,7 @@ signup = (request, response) => {
                 if(err) {
                     response.status(401).send("Signup Unsuccessful");
                 }
-                if (result.rows.length == 1) {
+                else {
                     response.send("Signup Succesful");
                 }
             })

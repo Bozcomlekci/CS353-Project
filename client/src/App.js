@@ -9,6 +9,11 @@ import Restaurant from './components/Restaurant';
 import RestaurantList from './components/RestaurantList';
 import Signup from './components/Signup';
 
+import Box from './components/Box';
+import FinalizeOrder from './components/FinalizeOrder';
+import CustomerHomePage from './components/CustomerHomePage';
+import OwnerHomePage from './components/OwnerHomePage';
+import DeliveryHomePage from './components/DeliveryHomePage';
 
 class App extends React.Component {
   constructor(props) {
@@ -59,17 +64,29 @@ class App extends React.Component {
     });
   }
 
+  HomePage = (user) => {
+    if (user.type == "Customer") {
+      return <CustomerHomePage user={user}/>;
+    } else if (user.type == "RestaurantOwner") {
+      return <OwnerHomePage user={user}/>;
+    } else if (user.type == "SupportStaff") {
+      
+    } else if (user.type == "DeliveryPerson") {
+      return <DeliveryHomePage user={user}/>;
+    }
+
+  }
+
   render = () => {
     if (!this.state.loggedIn) {
       return (
-        
         <Router>
          <Switch>
           <Route exact path="/signup/">
               <Signup/>
             </Route>
 
-            <Route exact path="/">
+            <Route path="/">
             <HomePageNotLoggedIn loggedIn = {this.state.loggedIn} onLogin = {(l) => this.onAuthChange(l)}/>
             </Route>
 
@@ -88,23 +105,22 @@ class App extends React.Component {
               <AddressBox/>
             </Route>
             <Route exact path="/box">
-              <h1>BOX</h1>
+              <Box/>
             </Route>
             <Route exact path="/add_option">
               <h1>ADD OPTION</h1>
             </Route>
+            <Route exact path="/finalize_order">
+              <FinalizeOrder/>
+            </Route>
+            <Route path="/restaurants/:id">
+              <Restaurant/>
+            </Route>
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
-          
-
-            <Route exact path="/restaurants/1">
-              <Restaurant restaurant_id={1}/>
-            </Route>
             <Route path="/">
-              <div>
-                <h1>LOGGED IN</h1>
-              </div>
+              {this.HomePage(this.state.user)}
             </Route>
           </Switch>
         </Router>
@@ -112,5 +128,9 @@ class App extends React.Component {
     }
   }
 }
-
+/*
+            <Route exact path="/restaurants/1">
+              <Restaurant restaurant_id={1}/>
+            </Route>
+*/
 export default App;

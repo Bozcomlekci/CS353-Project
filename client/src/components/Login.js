@@ -3,12 +3,14 @@ import axios from 'axios';
 import TextField from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   loginBox: {
-    margin: '0 auto',
+    //margin: '0 auto',
     display: 'flex',
-    justifyContent: 'center',
+    //justifyContent: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     border: '2px solid black',
@@ -18,7 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
   loginText: {
     fontSize: '32px',
-    textAlign: 'center',
+    textAlign: 'center'
+    
+  },
+  titleText: {
+    fontSize: '32px',
+    textAlign: 'left',
+    color : 'white'
   },
   form: {
     '& > *': {
@@ -54,13 +62,21 @@ export default function Login(props) {
   const classes = useStyles();
 
   return (
+    
     <div className={classes.loginBox} style={{
       backgroundColor: 'lightblue',
       width: '100%',
       height: '100%'
     }}>
+      <div  style={{
+      backgroundColor: 'blue',
+      width: '100%',
+      height: '10%'
+      }}>
+        <p className={classes.titleText}>YEMEK KUTUSU</p>
+      </div>
       <p className={classes.loginText}>Login</p>
-      <form className={classes.form} onSubmit={handleSubmit}>
+      <form className={classes.form} onSubmit={handleSubmit} >
         
         <TextField required id="outlined-basic" label="Username" name="username" variant="outlined" placeholder="Username"/>
         <TextField required id="outlined-basic" label="Password" name="password" type="password" variant="outlined" placeholder="Password"/>

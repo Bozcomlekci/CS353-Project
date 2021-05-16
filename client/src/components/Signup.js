@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '32px',
     textAlign: 'center'
   },
+  titleText: {
+    fontSize: '32px',
+    textAlign: 'left',
+    color : 'white'
+  },
   form: {
     '& > *': {
     
@@ -68,37 +73,48 @@ export default function Signup(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.signupBox}>
-      <p className={classes.signupText}>Signup</p>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <TextField required id="outlined-basic" label="Username" name="username" variant="outlined" placeholder="Username"/>
-        <TextField required id="outlined-basic" label="First Name" name="firstname" variant="outlined" placeholder="First Name"/>
-        <TextField required id="outlined-basic" label="Last Name" name="lastname" variant="outlined" placeholder="Last Name"/>
-        <TextField required id="outlined-basic" label="Email" name="email" variant="outlined" placeholder="Email"/>
-        <TextField
-        id="date"
-        label="Birthday"
-        type="date"
-        defaultValue="2017-05-24"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-        <TextField required id="outlined-basic" label="Password" name="password" type="password" variant="outlined" placeholder="Password"/>
-        <TextField required id="outlined-basic" label="Confirm Password" name="confirmPassword" type="password" variant="outlined" placeholder="Confirm Password"/>
+    <div>
+    <div  style={{
+      backgroundColor: 'blue',
+      width: '100%',
+      height: '20%'
+      }}>
+      <p className={classes.titleText}>YEMEK KUTUSU</p>
+      </div>
+      <div className={classes.signupBox}>
+          
+          <p className={classes.signupText}>Signup</p>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <TextField required id="outlined-basic" label="Username" name="username" variant="outlined" placeholder="Username"/>
+            <TextField required id="outlined-basic" label="First Name" name="firstname" variant="outlined" placeholder="First Name"/>
+            <TextField required id="outlined-basic" label="Last Name" name="lastname" variant="outlined" placeholder="Last Name"/>
+            <TextField required id="outlined-basic" label="Email" name="email" variant="outlined" placeholder="Email"/>
+            <TextField
+            id="date"
+            label="Birthday"
+            type="date"
+            defaultValue="2017-05-24"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+            <TextField required id="outlined-basic" label="Password" name="password" type="password" variant="outlined" placeholder="Password"/>
+            <TextField required id="outlined-basic" label="Confirm Password" name="confirmPassword" type="password" variant="outlined" placeholder="Confirm Password"/>
 
 
-        <FormLabel component="legend">Type</FormLabel>
-            <RadioGroup aria-label="type" name="type">
-                <FormControlLabel value="Customer" control={<Radio />} label="Customer" />
-                <FormControlLabel value="RestaurantOwner" control={<Radio />} label="Restaurant Owner" />
-                <FormControlLabel value="DeliveryPerson" control={<Radio />} label="Driver" />
-                <FormControlLabel value="SupportStaff" control={<Radio />} label="Support" />
-            </RadioGroup>
+            <FormLabel component="legend">Type</FormLabel>
+                <RadioGroup aria-label="type" name="type">
+                    <FormControlLabel value="Customer" control={<Radio />} label="Customer" />
+                    <FormControlLabel value="RestaurantOwner" control={<Radio />} label="Restaurant Owner" />
+                    <FormControlLabel value="DeliveryPerson" control={<Radio />} label="Driver" />
+                    <FormControlLabel value="SupportStaff" control={<Radio />} label="Support" />
+                </RadioGroup>
+        
+            <Button color="primary" variant="contained" type="submit">SIGNUP</Button>
+          </form>
+        </div>
     
-        <Button color="primary" variant="contained" type="submit">SIGNUP</Button>
-      </form>
     </div>
   );
 }

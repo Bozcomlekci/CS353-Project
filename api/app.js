@@ -57,12 +57,17 @@ app.get('/logout', logoutRouter);
 app.post('/review/write', reviewRouter.writeReviewRouter);
 app.get('/review/get', reviewRouter.getReviewRouter);
 app.get('/review/list', reviewRouter.listReviewsRouter);
+app.post('/review/response', reviewRouter.responseRouter);
+
+
 app.get('/userInfo', userInfoRouter.getUserInfoRouter);
 app.get('/restaurant/list_orderables', restaurantRouter.listOrderablesRouter);
 app.get('/restaurant/list_restaurants', restaurantRouter.listRestaurantsRouter);
 app.get('/restaurant/list_items', restaurantRouter.listItemsRouter);
 app.get('/restaurant/get_options', restaurantRouter.getOptionsRouter);
 app.post('/restaurant/add_item', restaurantRouter.addItemRouter);
+app.post('/restaurant/update_orderable', restaurantRouter.updateOrderableRouter);
+app.post('/restaurant/remove_orderable', restaurantRouter.removeOrderableRouter);
 
 app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);
@@ -75,7 +80,7 @@ app.get('/box/get', boxRouter.getBoxRouter);
 app.get('/box/remove', boxRouter.removeFromBoxRouter);
 app.get('/box/update', boxRouter.updateBoxRouter);
 
-app.get('/order/create', orderRouter.createOrderRouter);
+app.post('/order/create', orderRouter.createOrderRouter);
 app.get('/order/customer', orderRouter.getCustomerOrdersRouter);
 app.get('/order/customerDetails', orderRouter.getDetailsOfAnOrderRouter);
 app.get('/order/restaurant', orderRouter.restaurantOrdersRouter);

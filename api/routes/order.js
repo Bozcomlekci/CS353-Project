@@ -191,7 +191,7 @@ getDeliveryPersonOrders = (request, response) => {
 
 getCustomerOrdersRouter.get('/order/customer', getCustomerOrders);
 getDetailsOfAnOrderRouter.get('/order/customerDetails', getDetailsOfAnOrder);
-createOrderRouter.get('/order/create', createOrder);
+createOrderRouter.post('/order/create', createOrder);
 restaurantOrdersRouter.get('/order/restaurant', getRestaurantOrders);
 deliveryPersonOrdersRouter.get('/order/delivery', getDeliveryPersonOrders);
 module.exports = {

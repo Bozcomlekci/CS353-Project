@@ -74,7 +74,7 @@ app.get('/box/get', boxRouter.getBoxRouter);
 app.get('/box/remove', boxRouter.removeFromBoxRouter);
 app.get('/box/update', boxRouter.updateBoxRouter);
 
-app.get('/order/create', orderRouter.createOrderRouter);
+app.post('/order/create', orderRouter.createOrderRouter);
 app.get('/order/customer', orderRouter.getCustomerOrdersRouter);
 app.get('/order/customerDetails', orderRouter.getDetailsOfAnOrderRouter);
 app.get('/order/restaurant', orderRouter.restaurantOrdersRouter);

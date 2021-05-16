@@ -34,6 +34,7 @@ login = (request, response) => {
             
             if(result1.rows.length == 1){
               sess.user.type = "Customer";
+              sess.box = [];
               response.send(sess);              }
           });
 
@@ -44,6 +45,7 @@ login = (request, response) => {
             
             if(result1.rows.length == 1){
               sess.user.type = "RestaurantOwner";
+              sess.user.restaurant = null;
               response.send(sess);           
              }
           });

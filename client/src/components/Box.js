@@ -91,7 +91,7 @@ export default function Box(props) {
       {renderBox()}
     </div>
     <div>
-      <Button href="/finalizeorder">Make Order</Button>
+      <Button href="/finalize_order">Make Order</Button>
     </div>
     <div>
       {amount}

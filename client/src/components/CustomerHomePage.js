@@ -8,7 +8,7 @@ import BoxItem from './BoxItem';
 const useStyles = makeStyles((theme) => ({
 }));
 
-export default function HomePage(props) {
+export default function CustomerHomePage(props) {
   const [amount, setAmount] = useState(0);
   const classes = useStyles();
 

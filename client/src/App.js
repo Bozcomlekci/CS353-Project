@@ -11,7 +11,8 @@ import Signup from './components/Signup';
 
 import Box from './components/Box';
 import FinalizeOrder from './components/FinalizeOrder';
-import HomePage from './components/HomePage';
+import CustomerHomePage from './components/CustomerHomePage';
+import OwnerHomePage from './components/OwnerHomePage';
 
 class App extends React.Component {
   constructor(props) {
@@ -62,17 +63,29 @@ class App extends React.Component {
     });
   }
 
+  HomePage = (user) => {
+    if (user.type == "Customer") {
+      return <CustomerHomePage user={user}/>;
+    } else if (user.type == "RestaurantOwner") {
+      return <OwnerHomePage user={user}/>;
+    } else if (user.type == "SupportStaff") {
+      
+    } else if (user.type == "DeliveryPerson") {
+      
+    }
+
+  }
+
   render = () => {
     if (!this.state.loggedIn) {
       return (
-        
         <Router>
          <Switch>
           <Route exact path="/signup/">
               <Signup/>
             </Route>
 
-            <Route exact path="/">
+            <Route path="/">
             <HomePageNotLoggedIn loggedIn = {this.state.loggedIn} onLogin = {(l) => this.onAuthChange(l)}/>
             </Route>
 
@@ -99,14 +112,14 @@ class App extends React.Component {
             <Route exact path="/finalize_order">
               <FinalizeOrder/>
             </Route>
+            <Route path="/restaurants/:id">
+              <Restaurant/>
+            </Route>
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
-            <Route exact path="/restaurants/1">
-              <Restaurant restaurant_id={1}/>
-            </Route>
             <Route path="/">
-              <HomePage user = {this.state.user}/>
+              {this.HomePage(this.state.user)}
             </Route>
           </Switch>
         </Router>
@@ -114,5 +127,9 @@ class App extends React.Component {
     }
   }
 }
-
+/*
+            <Route exact path="/restaurants/1">
+              <Restaurant restaurant_id={1}/>
+            </Route>
+*/
 export default App;

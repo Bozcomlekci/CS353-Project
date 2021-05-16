@@ -198,23 +198,44 @@ async function addRecords() {
         await client.query("INSERT INTO Customer VALUES ('admin', 200);");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'burger', 'patty', 'normal', 'food');");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'cola', '1 can', '330 ml', 'beverage');");
-        await client.query("INSERT INTO Address VALUES (DEFAULT, 'bk address', 'jump street', '21', '99', '21', 'ankara', 'cankaya', '06000');");
-        await client.query("INSERT INTO Restaurant VALUES ('1', 'bk', '0', '8.5', true, '1');");
+        await client.query("INSERT INTO Address VALUES (1, 'bk address', 'jump street', '21', '99', '21', 'ankara', 'cankaya', '06000');");
+        await client.query("INSERT INTO Restaurant VALUES (DEFAULT, 'bk', '0', '8.5', true, '1');");
         await client.query("INSERT INTO Orderable VALUES ('1', 'burger menu', '0', '20', 'true');");
         await client.query("INSERT INTO Contain VALUES ('1', 'burger menu', '1', '1');");
         await client.query("INSERT INTO Contain VALUES ('1', 'burger menu', '2', '1');");
+        await client.query("INSERT INTO Option_ VALUES ('hot sauce');");
         await client.query("INSERT INTO Option_ VALUES ('bbq sauce');");
-        await client.query("INSERT INTO Hasoption VALUES ('1', 'bbq sauce', '1');");
         await client.query("INSERT INTO Option_ VALUES ('cheese');");
-        await client.query("INSERT INTO Hasoption VALUES ('1', 'cheese', '1');");
         await client.query("INSERT INTO Option_ VALUES ('normal');");
         await client.query("INSERT INTO Option_ VALUES ('zero');");
+        await client.query("INSERT INTO Option_ VALUES ('cherry');");
+        await client.query("INSERT INTO Hasoption VALUES ('1', 'bbq sauce', '1');");
+        await client.query("INSERT INTO Hasoption VALUES ('1', 'cheese', '1');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'normal', '2');");
         await client.query("INSERT INTO Hasoption VALUES ('1', 'zero', '2');");
+        
+        
+        await client.query("INSERT INTO Address VALUES (2, 'RestaurANT Address', 'Street 19', '21', '99', '21', 'ankara', 'cankaya', '06400');");
+        await client.query("INSERT INTO Restaurant VALUES (DEFAULT, 'RestaurANT', '0', '9.9', true, '2');");
+        await client.query("INSERT INTO Orderable VALUES ('2', 'menu1', '15', '40', 'true');");
+        await client.query("INSERT INTO Item VALUES (DEFAULT, 'chicken burger', 'chicken patty, bread', 'normal', 'food');");
+        await client.query("INSERT INTO Contain VALUES ('2', 'menu1', '3', '2');");
+        await client.query("INSERT INTO Contain VALUES ('2', 'menu1', '2', '2');");
+        await client.query("INSERT INTO Orderable VALUES ('2', 'menu2', '15', '15', 'true');");
+        await client.query("INSERT INTO Item VALUES (DEFAULT, 'vegetable wrap', 'vegetables in a wrap', 'normal', 'food');");
+        await client.query("INSERT INTO Contain VALUES ('2', 'menu2', '4', '1');");
+
+        await client.query("INSERT INTO Hasoption VALUES ('2', 'hot sauce', '3');");
+        await client.query("INSERT INTO Hasoption VALUES ('2', 'hot sauce', '4');");
+        await client.query("INSERT INTO Hasoption VALUES ('2', 'cheese', '3');");
+        await client.query("INSERT INTO Hasoption VALUES ('2', 'normal', '2');");
+        await client.query("INSERT INTO Hasoption VALUES ('2', 'cherry', '2');");
 
 
         await client.query("INSERT INTO Users VALUES ('Joe', 'Joe', 'Joe', '2016-03-03', 'Joe@gmail.com', 'Joe');");
         await client.query("INSERT INTO RestaurantOwner VALUES ('Joe', 0);");
+        await client.query("INSERT INTO Owns VALUES (1, 'Joe');");
+        await client.query("INSERT INTO Owns VALUES (2, 'Joe');");
         await client.query("INSERT INTO Users VALUES ('ABC', 'ABC', 'ABC', '2016-03-03', 'ABC@gmail.com', 'ABC');");
         await client.query("INSERT INTO SupportStaff VALUES ('ABC', 1, true);");
     } catch (err) {

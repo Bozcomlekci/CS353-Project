@@ -6,17 +6,24 @@ import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   loginBox: {
-    border: '1px solid black',
-    width: 'fit-content'
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    border: '2px solid black',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'lightblue'
   },
   loginText: {
     fontSize: '32px',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   form: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
+      width: '30ch',
       display: 'flex'
     },
   },
@@ -47,9 +54,14 @@ export default function Login(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.loginBox}>
+    <div className={classes.loginBox} style={{
+      backgroundColor: 'lightblue',
+      width: '100%',
+      height: '100%'
+    }}>
       <p className={classes.loginText}>Login</p>
       <form className={classes.form} onSubmit={handleSubmit}>
+        
         <TextField required id="outlined-basic" label="Username" name="username" variant="outlined" placeholder="Username"/>
         <TextField required id="outlined-basic" label="Password" name="password" type="password" variant="outlined" placeholder="Password"/>
         <Button variant="contained" type="submit">Login</Button>

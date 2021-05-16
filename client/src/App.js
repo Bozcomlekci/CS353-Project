@@ -119,6 +119,9 @@ class App extends React.Component {
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
+            <Route exact path="/support/listtickets">
+              <RestaurantList/>
+            </Route>
             <Route path="/">
               {this.HomePage(this.state.user)}
             </Route>

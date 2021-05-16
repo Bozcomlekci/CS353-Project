@@ -7,7 +7,6 @@ const getPool = require('../db');
 
 
 login = (request, response) => {
-  console.log(request.body);
   
   let sess = request.session;
   if (!sess.loggedIn) {

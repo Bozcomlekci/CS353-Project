@@ -55,10 +55,15 @@ addToBox = (request, response) => {
                 let invalid = false;
                 for (let i = 0; i < orderable.options.length; i++) {
                     let found = false;
-                    for (let j = 0; j < options.length; j++) {
-                        if ((i + 1) == options[j].item_id && orderable.options[i] == options[j].option_name) {
-                            found = true;
-                            break;
+                    if (orderable.options[i] == "None") {
+                        found = true;
+                    }
+                    else {
+                        for (let j = 0; j < options.length; j++) {
+                            if ((i + 1) == options[j].item_id && orderable.options[i] == options[j].option_name) {
+                                found = true;
+                                break;
+                            }
                         }
                     }
                     if (!found) {

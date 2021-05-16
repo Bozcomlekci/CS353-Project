@@ -113,7 +113,7 @@ export default function Orderable(props) {
 
   function optionButtons(item) {
     let options = [];
-    options.push(<FormControlLabel value='None' control={<Radio/>} label='None' />)
+    options.push(<FormControlLabel value='None' control={<Radio/>} label='Normal' />)
     for (let i = 0; i < item.options.length; i++) {
       let option = item.options[i];
       options.push(<FormControlLabel value={option} control={<Radio/>} label={option} />)

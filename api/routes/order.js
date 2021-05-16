@@ -59,6 +59,7 @@ createOrder = (request, response) => {
     response.sendStatus(200);
 }
 
+
 getCustomerOrders = (request, response) => {
     sess = request.session;
     if(sess.loggedIn){

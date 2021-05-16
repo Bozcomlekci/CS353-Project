@@ -66,6 +66,8 @@ app.get('/restaurant/list_restaurants', restaurantRouter.listRestaurantsRouter);
 app.get('/restaurant/list_items', restaurantRouter.listItemsRouter);
 app.get('/restaurant/get_options', restaurantRouter.getOptionsRouter);
 app.post('/restaurant/add_item', restaurantRouter.addItemRouter);
+app.post('/restaurant/update_orderable', restaurantRouter.updateOrderableRouter);
+app.post('/restaurant/remove_orderable', restaurantRouter.removeOrderableRouter);
 
 app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);

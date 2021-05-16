@@ -8,6 +8,8 @@ var listOrderablesRouter = express.Router();
 var getOptionsRouter = express.Router();
 var addItemRouter = express.Router();
 var listItemsRouter = express.Router();
+var updateOrderableRouter = express.Router();
+var removeOrderableRouter = express.Router();
 const getPool = require('../db');
 
 listRestaurants = (request, response) => {
@@ -16,7 +18,7 @@ listRestaurants = (request, response) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query('SELECT restaurant_id, name, average_rating, is_open, city, county FROM Restaurant JOIN Address ON Restaurant.address_id = Address.address_id', (err, result) => {
+        client.query('SELECT restaurant_id, name, average_rating, is_open, city, county FROM Restaurant NATURAL JOIN Address', (err, result) => {
             release()
             if (err) {
                 return console.error('Error executing query', err.stack)
@@ -101,11 +103,40 @@ addOrderable = (request, response) => {
 }
 
 removeOrderable = (request, response) => {
-
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query("DELETE FROM Contain WHERE orderable_name = $1 AND restaurant_id = $2;", [request.body.orderable_name, request.session.user.restaurant.restaurant_id], (err, result) => {
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            client.query("DELETE FROM Orderable WHERE orderable_name = $1 AND restaurant_id = $2;", [request.body.orderable_name, request.session.user.restaurant.restaurant_id], (err, result) => {
+                release();
+                if (err) {
+                    return console.error('Error executing query', err.stack)
+                }
+            });
+            response.sendStatus(200);
+        });
+    });
 }
 
 updateOrderable = (request, response) => {
-
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query("UPDATE Orderable SET discount = $1, price = $2, instock = $3 WHERE orderable_name = $4 AND restaurant_id = $5;", [request.body.discount, request.body.price, request.body.instock, request.body.orderable_name, request.session.user.restaurant.restaurant_id], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.sendStatus(200);
+        });
+    });
 }
 
 listItems = (request, response) => {
@@ -235,10 +266,14 @@ listRestaurantsRouter.get('/restaurant/list_restaurants', listRestaurants);
 getOptionsRouter.get('/restaurant/get_options', getOptionsForItem);
 addItemRouter.post('/restaurant/add_item', addItem);
 listItemsRouter.get('/restaurant/list_items', listItems);
+updateOrderableRouter.post('/restaurant/update_orderable', updateOrderable);
+removeOrderableRouter.post('/restaurant/remove_orderable', removeOrderable);
 module.exports = {
     listOrderablesRouter,
     listRestaurantsRouter,
     listItemsRouter,
     getOptionsRouter,
-    addItemRouter
+    addItemRouter,
+    updateOrderableRouter,
+    removeOrderableRouter
 };

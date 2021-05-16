@@ -18,9 +18,6 @@ var supportRouter = require('./routes/support');
 var boxRouter = require('./routes/box');
 
 var addressRouter = require('./routes/address');
-console.log(addressRouter);
-
-
 
 var orderRouter = require('./routes/order');
 var restaurantRouter = require('./routes/restaurant');
@@ -47,7 +44,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.post('/login', loginRouter);
+
+app.post('/login', loginRouter.loginOperationRouter);
+app.post('/changePassword', loginRouter.changePasswordRouter);
+
+
+
 app.post('/signup', signupRouter);
 app.get('/loggedin', loggedinRouter);
 app.get('/logout', logoutRouter);

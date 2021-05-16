@@ -16,6 +16,7 @@ var reviewRouter = require('./routes/review');
 var userInfoRouter = require('./routes/userInfo');
 var supportRouter = require('./routes/support');
 var boxRouter = require('./routes/box');
+var phoneRouter = require('./routes/phone');
 
 var addressRouter = require('./routes/address');
 
@@ -82,6 +83,12 @@ app.get('/address/restaurant', addressRouter.getRestaurantAddressRouter);
 
 app.get('/userinfo/restaurants', userInfoRouter.getRestaurantOfOwnerRotuer);
 app.post('/userInfo/set_current_restaurant', userInfoRouter.setCurrentlyManagedRestaurantRouter);
+
+app.get('/phone/customer', phoneRouter.getCustomerPhoneRouter);
+app.get('/phone/restaurant', phoneRouter.getRestaurantPhoneRouter);
+app.post('/phone/addRestaurant', phoneRouter.addRestaurantPhoneRouter);
+app.post('/phone/addCustomer', phoneRouter.addCustomerPhoneRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

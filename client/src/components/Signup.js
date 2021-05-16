@@ -9,6 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import "react-datepicker/dist/react-datepicker.css";
+
 const useStyles = makeStyles((theme) => ({
  signupBox: {
     margin: '0 auto',
@@ -60,7 +62,7 @@ export default function Signup(props) {
       return false;
     });
     */
-  
+    
     /*onSignup(sess.data);*/
   }
 

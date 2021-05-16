@@ -121,6 +121,7 @@ setCurrentlyManagedRestaurant = (request, response) => {
     response.send(request.session.user.restaurant);
 }
 
+
 getUserInfoRouter.get('/userInfo', getInfo);
 getRestaurantOfOwnerRotuer.get('/userInfo/restaurants', getRestaurantsOfOwner);
 setCurrentlyManagedRestaurantRouter.post('/userInfo/set_current_restaurant', setCurrentlyManagedRestaurant);

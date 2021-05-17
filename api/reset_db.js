@@ -11,7 +11,7 @@ let pool = new Pool(conf);
 
 async function dropTables() {
     const tables = [
-        'Contain', 'HasOption', 'Specify', 'ConsistOf', 'HasReview', 'CompleteOrder', 'SeeReview', 'HasAddress', 'IssueWarning', 'AssignedToTicket', 'SubmitTicket', 'HasTicket', 'Favorite', 'Contact', 'RestaurantContact', 'Owns', 'CreateReview', 'RequestForDelivery', 'DeliveredBy', 'DeliveredTo', 'SupportStaff', 'SupportTicket', 'DeliveryPerson', 'Review', 'Orderable', 'Option_', 'Item', 'Orders', 'Customer', 'RestaurantOwner', 'Restaurant', 'Address', 'Phone', 'Users'
+        'ConsistOf','Contain', 'HasOption', 'Specify',  'HasReview', 'CompleteOrder', 'SeeReview', 'HasAddress', 'IssueWarning', 'AssignedToTicket', 'SubmitTicket', 'HasTicket', 'Favorite', 'Contact', 'RestaurantContact', 'Owns', 'CreateReview', 'RequestForDelivery', 'DeliveredBy', 'DeliveredTo', 'SupportStaff', 'SupportTicket', 'DeliveryPerson', 'Review', 'Orderable', 'Option_', 'Item', 'Orders', 'Customer', 'RestaurantOwner', 'Restaurant', 'Address', 'Phone', 'Users'
        ]
     const client = await pool.connect();
     for (const tableName of tables) {
@@ -70,12 +70,15 @@ async function createTables() {
                     PRIMARY KEY ( username ), 
                     FOREIGN KEY (username) REFERENCES Users (username));`);
 
-        await client.query(`CREATE TABLE SupportStaff ( username VARCHAR, rank INTEGER, is_free BOOLEAN, 
-                    PRIMARY KEY ( username ), 
-                    FOREIGN KEY (username) REFERENCES Users (username));`);
+  
 
         await client.query(`CREATE TABLE SupportTicket ( ticket_id SERIAL PRIMARY KEY, date DATE, subject VARCHAR, 
                     content VARCHAR, response VARCHAR);`);
+
+        await client.query(`CREATE TABLE SupportStaff ( username VARCHAR, rank INTEGER, is_free BOOLEAN, current_ticket_id INTEGER, 
+                 PRIMARY KEY ( username ), 
+                FOREIGN KEY (username) REFERENCES Users (username),
+                FOREIGN KEY (current_ticket_id) REFERENCES SupportTicket(ticket_id));`);
 
         await client.query(`CREATE TABLE Phone ( phone_number VARCHAR, PRIMARY KEY ( phone_number ));`);
 
@@ -185,6 +188,32 @@ async function createTables() {
                     PRIMARY KEY(order_id),
                     FOREIGN KEY(address_id) references Address(address_id),
                     FOREIGN KEY(order_id) references Orders(order_id));`);
+        
+        await client.query('CREATE INDEX CompleteOrderUsernameIndex ON CompleteOrder (username);'); 
+
+        await client.query('CREATE INDEX CompleteOrderRestaurantIdIndex ON CompleteOrder (restaurant_id);');  
+        
+        await client.query('CREATE INDEX SeeReviewIndex ON SeeReview (username)');
+
+        await client.query('CREATE VIEW delivery_person_order_view as '
+        + ' with Delivery_Person_Orders AS ( '
+        + ' SELECT username, Orders.order_id, Rest_Address.address_id as rest_address_id,  '
+        + ' Rest_Address.explanation as rest_explanation, Rest_Address.street as rest_street, Rest_Address.street_number as rest_street_no, Rest_Address.street_name as rest_street_name, '
+        + ' Rest_Address.apt_number rest_apt_no, Rest_Address.city as rest_city_no, Rest_Address.county rest_county, Rest_Address.zip rest_zip,  '
+        + ' Cust_Addresss.address_id, '
+        + ' Cust_Addresss.explanation, Cust_Addresss.street, Cust_Addresss.street_number, Cust_Addresss.street_name, '
+        + ' Cust_Addresss.apt_number, Cust_Addresss.city, Cust_Addresss.county, Cust_Addresss.zip '
+        + ' FROM Orders NATURAL JOIN Restaurant NATURAL JOIN DeliveredBy, Address Rest_Address, Address Cust_Addresss, DeliveredTo delTo '
+        + ' WHERE Rest_Address.address_id = Restaurant.address_id and Cust_Addresss.address_id = delTo.address_id ), '
+        + ' Delivery_Person_Orders_Prices AS ( '
+        + ' SELECT order_id as oid, sum(price*quantity) as totalPrice FROM Orders NATURAL JOIN ConsistOf NATURAL JOIN Orderable '
+        + ' group by(order_id) ) '
+        + ' select * from Delivery_Person_Orders_Prices d1, Delivery_Person_Orders d2 ' 
+        + ' where d1.oid = d2.order_id; ');
+
+        
+
+        
     } catch (err) {
         console.log(err.stack);
     }

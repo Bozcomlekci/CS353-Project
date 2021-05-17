@@ -61,7 +61,7 @@ signup = (request, response) => {
 
         //if type is support staff insert into SupportStaff
         else if(type.localeCompare("SupportStaff") == 0){
-            client.query("INSERT INTO SupportStaff VALUES($1, 0, true)", [username], (err1, result1) => {
+            client.query("INSERT INTO SupportStaff VALUES($1, 0, true, NULL)", [username], (err1, result1) => {
                 if(err) {
                     response.status(401).send("Signup Unsuccessful");
                 }

@@ -156,7 +156,7 @@ issueWarning = (request, response) => {
 }
 
 
-writeTicketRouter.post('/support/listtickets', listTicket);
+writeTicketRouter.post('/support/listtickets', listTickets);
 writeTicketRouter.post('/support/writeticket', writeTicket);
 getTicketRouter.get('/support/getticket', getTicket);
 issueWarningRouter.get('/support/warn', issueWarning);

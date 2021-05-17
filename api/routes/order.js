@@ -168,28 +168,15 @@ getDeliveryPersonOrders = (request, response) => {
                 return console.error('Error acquiring client', err.stack)
             }
 
-            client.query("SELECT * FROM Orders NATURAL JOIN CompleteOrder "
-            + "NATURAL JOIN Restaurant NATURAL JOIN ConsistOf NATURAL JOIN Address " 
-            + "NATURAL JOIN Orderable, DeliveredBy D where D.username = $1",
+            client.query("SELECT * FROM delivery_person_order_view username = $1",
             [username], (err1, result1) => {
-            if(err1){
-                console.log(err1);
-                response.status(401).send("List Order Unsuccessful");
-            }
-            else{
-                client.query( "SELECT order_id, sum(price) FROM Orders NATURAL JOIN CompleteOrder NATURAL JOIN ConsistOf NATURAL JOIN Orderable NATURAL JOIN DeliveredBy " 
-                + "where D.username = $1 group by(order_id)", [username], (err2, result2) => {
-                    if(err2){
-                        console.log(err2);
-                        response.status(401).send("List Order Unsuccessful");
-                    }
-                    else{
-                        toBeReturned = (result1.rows).concat(result2.rows);
-                        response.status(200).json(toBeReturned); 
-                    }
-                })       
-            }
-        })
+                if(err1){
+                    response.status(401).send("List Order Unsuccessful");
+                }
+                else{
+                    response.json(result1.rows);
+                }
+            })
         })
     }
 }

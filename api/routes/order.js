@@ -258,6 +258,7 @@ getRestaurantOrders = (request, response) => {
                         break;
                     }
                 }
+                release();
                 response.send(orders);
         })
         })
@@ -277,9 +278,11 @@ getDeliveryPersonOrders = (request, response) => {
             client.query("SELECT * FROM delivery_person_order_view username = $1",
             [username], (err1, result1) => {
                 if(err1){
+                    release();
                     response.status(401).send("List Order Unsuccessful");
                 }
                 else{
+                    release();
                     response.json(result1.rows);
                 }
             })
@@ -310,9 +313,11 @@ requestDeliveryPersonForDelivery = (request, response) => {
                         return console.error('Error executing query', err.stack)
                     }
                 });
+                release();
                 response.sendStatus(200);
             }
             else {
+                release();
                 response.sendStatus(403);
             }
         });
@@ -331,6 +336,7 @@ approveOrder = (request, response) => {
                 return console.error('Error executing query', err.stack)
             }
         });
+        release();
         response.sendStatus(200);
     });
 }

@@ -74,15 +74,15 @@ export default function Signup(props) {
 
   return (
     <div>
-    <div  style={{
-      backgroundColor: 'blue',
-      width: '100%',
-      height: '20%'
-      }}>
-      <p className={classes.titleText}>YEMEK KUTUSU</p>
-      </div>
+      <div  style={{
+        backgroundColor: 'blue',
+        width: '100%',
+        height: '10%'
+        }}>
+          <p className={classes.titleText}>YEMEK KUTUSU</p>
+        </div>
       <div className={classes.signupBox}>
-          
+        
           <p className={classes.signupText}>Signup</p>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField required id="outlined-basic" label="Username" name="username" variant="outlined" placeholder="Username"/>

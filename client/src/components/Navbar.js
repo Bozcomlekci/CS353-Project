@@ -47,19 +47,19 @@ class Navbar extends React.Component {
             </Typography>
             
             <Container>
-              <a href="/">YemekKutusu</a> \
+            \ <a href="/">YemekKutusu</a> \
             </Container>
             <Container>
-            <a href="/restaurants/">Restaurants</a> \
+            \ <a href="/restaurants/">Restaurants</a> \
             </Container>
             <Container>
-            <a href="/addresses">Addresses</a> \
+            \ <a href="/addresses">Addresses</a> \
             </Container>
             <Container>
-            <a href="/B">Orders</a> \
+            \ <a href="/B">Orders</a> \
             </Container>
             <Container>
-            <a href="/box">Box</a>  \
+            \ <a href="/box">Box</a>  \
             </Container>
             {button}
           </Toolbar>

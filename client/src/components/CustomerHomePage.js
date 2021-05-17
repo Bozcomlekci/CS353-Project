@@ -74,5 +74,6 @@ export default function CustomerHomePage(props) {
             </Typography>
             </div>
   </Paper>
+
   </div>);
 }

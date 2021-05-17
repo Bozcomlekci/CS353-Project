@@ -18,4 +18,6 @@ The food ordering and delivery system will be an online application for customer
 
 [Link to the design report](https://bozcomlekci.github.io/CS353-Project/CS353DesignReport.pdf)
 
+[Link to the final implementation report](https://bozcomlekci.github.io/CS353-Project/CS353FinalReport.pdf)
+
 ![E/R Diagram](/assets/images/FoodOrderDeliverySystemERDiagram.png)

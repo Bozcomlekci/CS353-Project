@@ -18,6 +18,8 @@ var supportRouter = require('./routes/support');
 var boxRouter = require('./routes/box');
 var phoneRouter = require('./routes/phone');
 
+var search_Router = require('./routes/search');
+
 var addressRouter = require('./routes/address');
 
 var orderRouter = require('./routes/order');
@@ -114,9 +116,7 @@ app.get('/phone/restaurant', phoneRouter.getRestaurantPhoneRouter);
 app.post('/phone/addRestaurant', phoneRouter.addRestaurantPhoneRouter);
 app.post('/phone/addCustomer', phoneRouter.addCustomerPhoneRouter);
 
-
-
-
+app.get('/search', search_Router.searchRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

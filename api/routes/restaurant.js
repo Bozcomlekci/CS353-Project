@@ -16,6 +16,7 @@ var setOrderableItemQuantityRouter =  express.Router();
 var getOptionsForItemRouter = express.Router();
 var addOptionToItemRouter = express.Router();
 var removeOptionFromItemRouter = express.Router();
+var addOrderableRouter = express.Router();
 const getPool = require('../db');
 
 listRestaurants = (request, response) => {
@@ -168,7 +169,19 @@ removeOptionFromItem = (request, response) => {
 }
 
 addOrderable = (request, response) => {
-
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(`INSERT INTO Orderable Values($1, $2, $3, $4, $5)`, [request.session.user.restaurant.restaurant_id, request.body.orderable_name,request.body.discount, request.body.price, request.body.instock], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.sendStatus(200);
+        });
+    });
 }
 
 addItemToOrderable = (request, response) => {
@@ -357,10 +370,10 @@ listOrderables = (request, response) => {
         //LEFT OUTER JOIN HasOption ON HasOption.item_id = Item.item_id
         //WHERE Orderable.restaurant_id = $1;`, [request.query.restaurant_id], (err, result) => {
         if (request.query.in_name == undefined) {
-            client.query(`SELECT Contain.restaurant_id, Contain.orderable_name, discount, price, instock, Item.item_id, quantity, name, content, size, itemtype, option_name
-            FROM Orderable JOIN Contain ON Orderable.restaurant_id = Contain.restaurant_id AND Orderable.orderable_name = Contain.orderable_name
-            JOIN Item ON Contain.item_id = Item.item_id
-            LEFT OUTER JOIN (SELECT * FROM HasOption WHERE restaurant_id = 1) AS RestaurantOptions  ON RestaurantOptions.item_id = Item.item_id
+            client.query(`SELECT Orderable.restaurant_id, Orderable.orderable_name, discount, price, instock, Item.item_id, quantity, name, content, size, itemtype, option_name
+            FROM Orderable LEFT OUTER JOIN Contain ON Orderable.restaurant_id = Contain.restaurant_id AND Orderable.orderable_name = Contain.orderable_name
+            LEFT OUTER JOIN Item ON Contain.item_id = Item.item_id
+            LEFT OUTER JOIN (SELECT * FROM HasOption WHERE restaurant_id = $1) AS RestaurantOptions  ON RestaurantOptions.item_id = Item.item_id
             WHERE Orderable.restaurant_id = $1;`, [request.query.restaurant_id], (err, result) => {
                 release()
                 if (err) {
@@ -370,10 +383,10 @@ listOrderables = (request, response) => {
             });
         }
         else {
-            client.query(`SELECT Contain.restaurant_id, Contain.orderable_name, discount, price, instock, Item.item_id, quantity, name, content, size, itemtype, option_name
-            FROM Orderable JOIN Contain ON Orderable.restaurant_id = Contain.restaurant_id AND Orderable.orderable_name = Contain.orderable_name
-            JOIN Item ON Contain.item_id = Item.item_id
-            LEFT OUTER JOIN (SELECT * FROM HasOption WHERE restaurant_id = 1) AS RestaurantOptions  ON RestaurantOptions.item_id = Item.item_id
+            client.query(`SELECT Orderable.restaurant_id, Orderable.orderable_name, discount, price, instock, Item.item_id, quantity, name, content, size, itemtype, option_name
+            FROM Orderable LEFT OUTER JOIN Contain ON Orderable.restaurant_id = Contain.restaurant_id AND Orderable.orderable_name = Contain.orderable_name
+            LEFT OUTER JOIN Item ON Contain.item_id = Item.item_id
+            LEFT OUTER JOIN (SELECT * FROM HasOption WHERE restaurant_id = $1) AS RestaurantOptions  ON RestaurantOptions.item_id = Item.item_id
             WHERE Orderable.restaurant_id = $1 AND Contain.orderable_name LIKE $2;`, [request.query.restaurant_id, "%" + request.query.in_name + "%"], (err, result) => {
                 release()
                 if (err) {
@@ -386,6 +399,7 @@ listOrderables = (request, response) => {
 }
 
 // to be changed
+addOrderableRouter.post('/restaurant/add_orderable', addOrderable);
 listOrderablesRouter.get('/restaurant/list_orderables', listOrderables);
 listRestaurantsRouter.get('/restaurant/list_restaurants', listRestaurants);
 getOptionsRouter.get('/restaurant/get_options', getOptionsForItem);
@@ -412,5 +426,6 @@ module.exports = {
     setOrderableItemQuantityRouter,
     getOptionsForItemRouter,
     addOptionToItemRouter,
-    removeOptionFromItemRouter
+    removeOptionFromItemRouter,
+    addOrderableRouter
 };

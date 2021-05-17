@@ -3,6 +3,7 @@ var getUserInfoRouter = express.Router();
 var getRestaurantOfOwnerRotuer = express.Router();
 var setCurrentlyManagedRestaurantRouter = express.Router();
 var getCurrentlyManagedRestaurantRouter = express.Router();
+var topUpCreditRouter = express.Router();
 const getPool = require('../db');
 
 getInfo = (request, response) => {
@@ -121,12 +122,30 @@ setCurrentlyManagedRestaurant = (request, response) => {
     response.send(request.session.user.restaurant);
 }
 
+topUpCredit = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+          return console.error('Error acquiring client', err.stack)
+        }
+        console.log("SESSSSSION", request.session);
+        client.query('UPDATE Customer SET credit = credit + $1 WHERE username = $2', [request.query.amount, request.session.user.username], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.sendStatus(200);
+        })
+    });
+}
 
+topUpCreditRouter.get('/userInfo/top_up_credit', topUpCredit);
 getUserInfoRouter.get('/userInfo', getInfo);
 getRestaurantOfOwnerRotuer.get('/userInfo/restaurants', getRestaurantsOfOwner);
 setCurrentlyManagedRestaurantRouter.post('/userInfo/set_current_restaurant', setCurrentlyManagedRestaurant);
 module.exports = {
     getUserInfoRouter,
     getRestaurantOfOwnerRotuer,
-    setCurrentlyManagedRestaurantRouter
+    setCurrentlyManagedRestaurantRouter,
+    topUpCreditRouter
 };

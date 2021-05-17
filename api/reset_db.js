@@ -42,7 +42,7 @@ async function createTables() {
                     FOREIGN KEY (order_id) REFERENCES Orders(order_id));`);
 
         await client.query(`CREATE TABLE Address ( address_id SERIAL PRIMARY KEY, explanation VARCHAR, street VARCHAR, 
-                    street_number INTEGER, street_name VARCHAR, apt_number INTEGER, city VARCHAR, 
+                    street_number INTEGER, apt_number INTEGER, city VARCHAR, 
                     county VARCHAR, zip VARCHAR);`);
 
         await client.query(`CREATE TABLE Restaurant ( restaurant_id SERIAL PRIMARY KEY, name VARCHAR, money FLOAT, 
@@ -198,10 +198,10 @@ async function createTables() {
         await client.query('CREATE VIEW delivery_person_order_view as '
         + ' with Delivery_Person_Orders AS ( '
         + ' SELECT username, Orders.order_id, Rest_Address.address_id as rest_address_id,  '
-        + ' Rest_Address.explanation as rest_explanation, Rest_Address.street as rest_street, Rest_Address.street_number as rest_street_no, Rest_Address.street_name as rest_street_name, '
+        + ' Rest_Address.explanation as rest_explanation, Rest_Address.street as rest_street, Rest_Address.street_number as rest_street_no, '
         + ' Rest_Address.apt_number rest_apt_no, Rest_Address.city as rest_city_no, Rest_Address.county rest_county, Rest_Address.zip rest_zip,  '
         + ' Cust_Addresss.address_id, '
-        + ' Cust_Addresss.explanation, Cust_Addresss.street, Cust_Addresss.street_number, Cust_Addresss.street_name, '
+        + ' Cust_Addresss.explanation, Cust_Addresss.street, Cust_Addresss.street_number,'
         + ' Cust_Addresss.apt_number, Cust_Addresss.city, Cust_Addresss.county, Cust_Addresss.zip '
         + ' FROM Orders NATURAL JOIN Restaurant NATURAL JOIN DeliveredBy, Address Rest_Address, Address Cust_Addresss, DeliveredTo delTo '
         + ' WHERE Rest_Address.address_id = Restaurant.address_id and Cust_Addresss.address_id = delTo.address_id ), '
@@ -297,7 +297,7 @@ async function addRecords() {
         await client.query("INSERT INTO Customer VALUES ('admin', 200);");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'burger', 'patty', 'normal', 'food');");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'cola', '1 can', '330 ml', 'beverage');");
-        await client.query("INSERT INTO Address VALUES (1, 'bk address', 'jump street', '21', '99', '21', 'ankara', 'cankaya', '06000');");
+        await client.query("INSERT INTO Address VALUES (1, 'bk address', 'jump street', '21', '21', 'ankara', 'cankaya', '06000');");
         await client.query("INSERT INTO Restaurant VALUES (DEFAULT, 'bk', '0', '8.5', true, '1');");
         await client.query("INSERT INTO Orderable VALUES ('1', 'burger menu', '0', '20', 'true');");
         await client.query("INSERT INTO Contain VALUES ('1', 'burger menu', '1', '1');");
@@ -312,7 +312,7 @@ async function addRecords() {
         await client.query("INSERT INTO Hasoption VALUES ('1', 'zero', '2');");
         
         
-        await client.query("INSERT INTO Address VALUES (2, 'RestaurANT Address', 'Street 19', '21', '99', '21', 'ankara', 'cankaya', '06400');");
+        await client.query("INSERT INTO Address VALUES (2, 'RestaurANT Address', 'Street 19', '21', '21', 'ankara', 'cankaya', '06400');");
         await client.query("INSERT INTO Restaurant VALUES (DEFAULT, 'RestaurANT', '0', '9.9', true, '2');");
         await client.query("INSERT INTO Orderable VALUES ('2', 'menu1', '15', '40', 'true');");
         await client.query("INSERT INTO Item VALUES (DEFAULT, 'chicken burger', 'chicken patty, bread', 'normal', 'food');");

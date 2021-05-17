@@ -1,3 +1,4 @@
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -5,6 +6,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var session = require('express-session');
+var app = express();
+
+app.use(session({
+  secret: 'lmao secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,17 +34,10 @@ var addressRouter = require('./routes/address');
 var orderRouter = require('./routes/order');
 var restaurantRouter = require('./routes/restaurant');
 
-var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(session({
-  secret: 'lmao secret',
-  resave: false,
-  saveUninitialized: true
-}));
 
 //app.use(cors());
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
@@ -79,6 +81,8 @@ app.post('/restaurant/remove_option_from_item', restaurantRouter.removeOptionFro
 app.post('/restaurant/add_option_to_item', restaurantRouter.addOptionToItemRouter);
 app.get('/order/request_delivery',  orderRouter.requestDeliveryPersonForDeliveryRouter)
 
+app.post('/restaurant/add_orderable', restaurantRouter.addOrderableRouter);
+
 app.post('/support/writeticket', supportRouter.writeTicketRouter);
 app.get('/support/getticket', supportRouter.getTicketRouter);
 app.get('/support/listtickets', supportRouter.listTicketRouter);
@@ -110,6 +114,7 @@ app.get('/address/restaurant', addressRouter.getRestaurantAddressRouter);
 
 app.get('/userinfo/restaurants', userInfoRouter.getRestaurantOfOwnerRotuer);
 app.post('/userInfo/set_current_restaurant', userInfoRouter.setCurrentlyManagedRestaurantRouter);
+app.get('/userInfo/top_up_credit', userInfoRouter.topUpCreditRouter);
 
 app.get('/phone/customer', phoneRouter.getCustomerPhoneRouter);
 app.get('/phone/restaurant', phoneRouter.getRestaurantPhoneRouter);

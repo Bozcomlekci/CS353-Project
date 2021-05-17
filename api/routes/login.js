@@ -27,8 +27,8 @@ login = (request, response) => {
   
         else if (result.rows.length == 1) {
           console.log(result.rows);
-          sess.loggedIn = true;
-          sess.user = {username: username}
+          request.session.loggedIn = true;
+          request.session.user = {username: username}
           console.log(request.session);
           //find user type
           //check customer
@@ -38,60 +38,69 @@ login = (request, response) => {
             
             if(result1.rows.length == 1){
               release();
-              sess.user.type = "Customer";
-              sess.box = [];
-              response.send(sess);              }
-          });
-
-          //check restaurant owner
-          client.query('SELECT * FROM RestaurantOwner where username = $1', [username], (err1, result1) => {
-            if(err1){
+              request.session.user.type = "Customer";
+              request.session.box = [];
+              request.session.save();
+              response.send(request.session);              
             }
-            
-            if(result1.rows.length == 1){
-              release();
-              sess.user.type = "RestaurantOwner";
-              sess.user.restaurant = null;
-              response.send(sess);           
-             }
-          });
-          
-
-          //check support staff
-          client.query('SELECT * FROM SupportStaff where username = $1', [username], (err1, result1) => {
-            if(err1){
+              else {
+                //check restaurant owner
+                client.query('SELECT * FROM RestaurantOwner where username = $1', [username], (err1, result1) => {
+                  if(err1){
+                  }
+                  
+                  if(result1.rows.length == 1){
+                    release();
+                    request.session.user.type = "RestaurantOwner";
+                    request.session.user.restaurant = null;
+                    request.session.save();
+                    response.send(request.session);           
+                  }
+                  else {
+                    //check support staff
+                    client.query('SELECT * FROM SupportStaff where username = $1', [username], (err1, result1) => {
+                      if(err1){
+                      }
+                      
+                      if(result1.rows.length == 1){
+                        release();
+                        request.session.user.type = "SupportStaff";
+                        request.session.save();
+                        response.send(request.session);
+                      }
+                      else {
+                        //check delivery person
+                        client.query('SELECT * FROM DeliveryPerson where username = $1', [username], (err1, result1) => {
+                          if(err1){
+                          }
+                          
+                          if(result1.rows.length == 1){
+                            release();
+                            request.session.user.type = "DeliveryPerson";
+                            request.session.save();
+                            response.send(request.session);
+                          }
+                        });
+                      }
+                    });
+                  }
+                })
+              }
             }
-            
-            if(result1.rows.length == 1){
-              release();
-              sess.user.type = "SupportStaff";
-              response.send(sess);
-            }
-          });
-
-
-          //check delivery person
-          client.query('SELECT * FROM DeliveryPerson where username = $1', [username], (err1, result1) => {
-            if(err1){
-            }
-            
-            if(result1.rows.length == 1){
-              release();
-              sess.user.type = "DeliveryPerson";
-              response.send(sess);
-            }
-          });    
+            );
         }
         else {
-          response.status(401).send("Login Unsuccessful");
-          sess.loggedIn = false;
+          release();
+          request.session.loggedIn = false;
+          request.session.save();
+          response.send(request.session);
         }
       })
 
     });
   }
   else {
-    response.send(sess);
+    response.send(request.session);
   }
 }
 

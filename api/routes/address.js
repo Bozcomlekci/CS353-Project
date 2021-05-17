@@ -20,6 +20,7 @@ getCustomerAddresses = (request, response) => {
 
             console.log("ad   ", username);
             client.query('SELECT * FROM Address Natural Join HasAddress where username = $1', [username], (err1, result1) => { 
+                release();
                 if(err1){
                     response.status(401).send("Get Address Unsuccessful");
                 }

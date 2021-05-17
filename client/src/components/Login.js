@@ -55,7 +55,12 @@ export default function Login(props) {
       return false;
     });
     */
-  
+   console.log("SESSSSSSS", sess.data.loggedIn);
+   if (!sess.data.loggedIn) {
+    alert("Wrong username or password");
+   }
+   console.log("SESSSSSSS", sess.data);
+
     onLogin(sess.data);
   }
 

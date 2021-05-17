@@ -22,7 +22,7 @@ export default function AddOrderable(props) {
     
 
     async function addOrderable() {
-        await axios.post('http://localhost:9000/restaurant/add_item', {
+        await axios.post('http://localhost:9000/restaurant/add_orderable', {
             orderable_name: name,
             discount: discount,
             price: price,

@@ -85,6 +85,8 @@ app.get('/order/customer', orderRouter.getCustomerOrdersRouter);
 app.get('/order/customerDetails', orderRouter.getDetailsOfAnOrderRouter);
 app.get('/order/restaurant', orderRouter.restaurantOrdersRouter);
 app.get('/order/delivery', orderRouter.deliveryPersonOrdersRouter);
+app.get('/order/getNotReviewed', orderRouter.getUserNotReviewedOrders);
+
 
 
 

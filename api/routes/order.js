@@ -1,9 +1,11 @@
+const { request } = require('express');
 var express = require('express');
 var getCustomerOrdersRouter = express.Router();
 var getDetailsOfAnOrderRouter = express.Router();
 var restaurantOrdersRouter = express.Router();
 var deliveryPersonOrdersRouter = express.Router();
 var createOrderRouter = express.Router();
+var getNotReviewedRouter = express.Router();
 const getPool = require('../db');
 
 
@@ -58,6 +60,30 @@ createOrder = (request, response) => {
     });
     response.sendStatus(200);
 }
+
+getUserNotReviewedOrders = (request, response) => {
+    sess = request.session;
+    if(sess.loggedIn){
+        username = sess.user.username;
+        let pool = getPool();
+        pool.connect((err, client, release) => {
+            if (err) {
+                return console.error('Error acquiring client', err.stack)
+            }
+
+            client.query("SELECT order_id FROM Orders NATURAL JOIN CompleteOrder "
+            + " where username = $1 and order_id not in (select order_id from Review) ",
+            [username], (err1, result1) => {
+            if(err1){
+                return console.error('Error acquiring client', err.stack)
+            }
+            else{
+                response.json(result.rows);
+            }
+        })
+    })
+}
+} 
 
 
 getCustomerOrders = (request, response) => {
@@ -186,11 +212,13 @@ getDetailsOfAnOrderRouter.get('/order/customerDetails', getDetailsOfAnOrder);
 createOrderRouter.post('/order/create', createOrder);
 restaurantOrdersRouter.get('/order/restaurant', getRestaurantOrders);
 deliveryPersonOrdersRouter.get('/order/delivery', getDeliveryPersonOrders);
+getNotReviewedRouter.get('/order/getNotReviewed', getUserNotReviewedOrders);
 module.exports = {
     getCustomerOrdersRouter,
     restaurantOrdersRouter,
     getDetailsOfAnOrderRouter,
     deliveryPersonOrdersRouter,
-    createOrderRouter
+    createOrderRouter,
+    getNotReviewedRouter
 };
 

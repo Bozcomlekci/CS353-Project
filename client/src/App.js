@@ -14,6 +14,7 @@ import FinalizeOrder from './components/FinalizeOrder';
 import CustomerHomePage from './components/CustomerHomePage';
 import OwnerHomePage from './components/OwnerHomePage';
 import DeliveryHomePage from './components/DeliveryHomePage';
+import Orders from './components/Orders';
 
 class App extends React.Component {
   constructor(props) {
@@ -98,7 +99,7 @@ class App extends React.Component {
     else {
       return (
         <Router>
-          <Navbar loggedIn = {this.state.loggedIn} onLogout = {(l) => this.onAuthChange(l)}/>
+          <Navbar loggedIn = {this.state.loggedIn} user = {this.state.user} onLogout = {(l) => this.onAuthChange(l)}/>
           <Switch>
             <Route exact path="/addresses">
               <h1>Addresses</h1>
@@ -106,6 +107,9 @@ class App extends React.Component {
             </Route>
             <Route exact path="/box">
               <Box/>
+            </Route>
+            <Route exact path="/orders">
+              <Orders/>
             </Route>
             <Route exact path="/add_option">
               <h1>ADD OPTION</h1>

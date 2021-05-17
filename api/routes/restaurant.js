@@ -10,6 +10,12 @@ var addItemRouter = express.Router();
 var listItemsRouter = express.Router();
 var updateOrderableRouter = express.Router();
 var removeOrderableRouter = express.Router();
+var addItemToOrderableRouter = express.Router();
+var getItemsOfOrderableRouter = express.Router();
+var setOrderableItemQuantityRouter =  express.Router();
+var getOptionsForItemRouter = express.Router();
+var addOptionToItemRouter = express.Router();
+var removeOptionFromItemRouter = express.Router();
 const getPool = require('../db');
 
 listRestaurants = (request, response) => {
@@ -74,33 +80,152 @@ getOptionsForItem = (request, response) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query('SELECT option_name FROM HasOption JOIN Option_ ON HasOption.option_name = Option_.name WHERE item_id = $1 and restaurant_id = $2;', [request.query.item_id, request.query.restaurant_id], (err, result) => {
+        if (request.query.in_name != undefined) {
+            client.query('SELECT option_name FROM (SELECT DISTINCT option_name FROM HasOption NATURAL JOIN Option_ WHERE item_id = $1 AND restaurant_id = $2) AS opts WHERE option_name LIKE $3;', [request.query.item_id, request.session.user.restaurant.restaurant_id, '%' + request.query.in_name + '%'], (err, result) => {
+                if (err) {
+                    return console.error('Error executing query', err.stack)
+                }
+
+                console.log(result.rows,request.query.item_id, request.session.user.restaurant.restaurant_id);
+                let options = [];
+                for (const option of result.rows) {
+                    options.push({name: option.option_name, have_option: true});
+                }
+                console.log(options, 'OPTTTTTTTTTTTTTTTTTT');
+                client.query('SELECT name FROM (SELECT DISTINCT name FROM Option_ WHERE name NOT IN (SELECT DISTINCT option_name FROM HasOption NATURAL JOIN Option_ WHERE item_id = $1 and restaurant_id = $2)) AS opts WHERE name LIKE $3;', [request.query.item_id, request.session.user.restaurant.restaurant_id, '%' + request.query.in_name + '%'], (err, result) => {
+                    release()
+                    if (err) {
+                        return console.error('Error executing query', err.stack)
+                    }
+
+                    for (const option of result.rows) {
+                        options.push({name: option.name, have_option: false});
+                    }
+                    response.send(options);
+                })
+            })
+        }
+        else {
+            client.query('SELECT DISTINCT option_name FROM HasOption NATURAL JOIN Option_ WHERE item_id = $1 AND restaurant_id = $2;', [request.query.item_id, request.session.user.restaurant.restaurant_id], (err, result) => {
+                if (err) {
+                    return console.error('Error executing query', err.stack)
+                }
+
+                console.log(result.rows,request.query.item_id, request.session.user.restaurant.restaurant_id);
+                let options = [];
+                for (const option of result.rows) {
+                    options.push({name: option.option_name, have_option: true});
+                }
+                console.log(options, 'OPTTTTTTTTTTTTTTTTTT');
+                client.query('SELECT name FROM Option_ WHERE name NOT IN (SELECT DISTINCT option_name FROM HasOption NATURAL JOIN Option_ WHERE item_id = $1 and restaurant_id = $2);', [request.query.item_id, request.session.user.restaurant.restaurant_id], (err, result) => {
+                    release()
+                    if (err) {
+                        return console.error('Error executing query', err.stack)
+                    }
+
+                    for (const option of result.rows) {
+                        options.push({name: option.name, have_option: false});
+                    }
+                    response.send(options);
+                })
+            })
+        }
+    });
+}
+
+addOptionToItem = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query('INSERT INTO HasOption VALUES ($1, $2, $3);', [request.session.user.restaurant.restaurant_id, request.body.option_name, request.body.item_id], (err, result) => {
             release()
             if (err) {
                 return console.error('Error executing query', err.stack)
             }
 
-            let options = [];
-            for (const option of result.rows) {
-                options.push(option.option_name);
-            }
-            response.send(options);
+            response.sendStatus(200);
         })
     });
 }
 
-addOptionToItem = (request, response) => {
-    // check which restaurant the request is coming from
-    // check if restaurant owner, then see which restaurant they are currently operating on
-}
-
 removeOptionFromItem = (request, response) => {
-    // similar to above
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query('DELETE FROM HasOption WHERE restaurant_id = $1 AND option_name = $2 AND item_id = $3;', [request.session.user.restaurant.restaurant_id, request.body.option_name, request.body.item_id], (err, result) => {
+            release()
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+
+            response.sendStatus(200);
+        })
+    });
 }
 
 addOrderable = (request, response) => {
 
 }
+
+addItemToOrderable = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(`INSERT INTO Contain Values($1, $2, $3, $4) ON Conflict (restaurant_id, orderable_name, item_id)
+DO UPDATE SET quantity = EXCLUDED.quantity + Contain.quantity`, [request.session.user.restaurant.restaurant_id, request.body.orderable_name, request.body.item_id, request.body.quantity], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.sendStatus(200);
+        });
+    });
+}
+
+getItemsOfOrderable = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        client.query(`SELECT * FROM Contain NATURAL JOIN Item WHERE restaurant_id = $1 AND orderable_name = $2`, [request.session.user.restaurant.restaurant_id, request.query.orderable_name], (err, result) => {
+            release();
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            response.send(result.rows);
+        });
+    });
+}
+
+setOrderableItemQuantity = (request, response) => {
+    let pool = getPool();
+    pool.connect((err, client, release) => {
+        if (err) {
+            return console.error('Error acquiring client', err.stack)
+        }
+        console.log(request.body.quantity, request.session.user.restaurant.restaurant_id, request.body.orderable_name, request.body.item_id)
+        client.query(`UPDATE Contain SET quantity = $1 WHERE restaurant_id = $2 AND orderable_name = $3 AND item_id = $4`, [request.body.quantity, request.session.user.restaurant.restaurant_id, request.body.orderable_name, request.body.item_id], (err, result) => {
+            if (err) {
+                return console.error('Error executing query', err.stack)
+            }
+            client.query(`DELETE FROM Contain WHERE quantity = 0`, (err, result) => {
+                release();
+                if (err) {
+                    return console.error('Error executing query', err.stack)
+                }
+            });
+            response.sendStatus(200);
+        });
+    });
+}
+
 
 removeOrderable = (request, response) => {
     let pool = getPool();
@@ -268,6 +393,12 @@ addItemRouter.post('/restaurant/add_item', addItem);
 listItemsRouter.get('/restaurant/list_items', listItems);
 updateOrderableRouter.post('/restaurant/update_orderable', updateOrderable);
 removeOrderableRouter.post('/restaurant/remove_orderable', removeOrderable);
+addItemToOrderableRouter.post('/restaurant/add_item_to_orderable', addItemToOrderable);
+getItemsOfOrderableRouter.get('/restaurant/get_items_of_orderable', getItemsOfOrderable);
+setOrderableItemQuantityRouter.post('/restaurant/set_orderable_item_quantity', setOrderableItemQuantity);
+getOptionsForItemRouter.get('/restaurant/get_options_for_item', getOptionsForItem);
+addOptionToItemRouter.post('/restaurant/add_option_to_item', addOptionToItem);
+removeOptionFromItemRouter.post('/restaurant/remove_option_from_item', removeOptionFromItem);
 module.exports = {
     listOrderablesRouter,
     listRestaurantsRouter,
@@ -275,5 +406,11 @@ module.exports = {
     getOptionsRouter,
     addItemRouter,
     updateOrderableRouter,
-    removeOrderableRouter
+    removeOrderableRouter,
+    addItemToOrderableRouter,
+    getItemsOfOrderableRouter,
+    setOrderableItemQuantityRouter,
+    getOptionsForItemRouter,
+    addOptionToItemRouter,
+    removeOptionFromItemRouter
 };

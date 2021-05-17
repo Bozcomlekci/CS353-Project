@@ -9,10 +9,11 @@ const getPool = require('../db');
 login = (request, response) => {
   
   let sess = request.session;
+  console.log(sess, "LOGIN");
   if (!sess.loggedIn) {
     username = request.body.username;
     password = request.body.password;
-  
+
     let pool = getPool();
     pool.connect((err, client, release) => {
       if (err) {
@@ -25,9 +26,10 @@ login = (request, response) => {
         }
   
         else if (result.rows.length == 1) {
+          console.log(result.rows);
           sess.loggedIn = true;
           sess.user = {username: username}
-
+          console.log(request.session);
           //find user type
           //check customer
           client.query('SELECT * FROM Customer where username = $1', [username], (err1, result1) => {

@@ -57,6 +57,7 @@ addToBox = (request, response) => {
                     let found = false;
                     if (orderable.options[i] == "None") {
                         found = true;
+                        break;
                     }
                     else {
                         for (let j = 0; j < options.length; j++) {

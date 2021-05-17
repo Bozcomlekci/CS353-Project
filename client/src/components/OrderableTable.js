@@ -9,17 +9,25 @@ import { DataGrid } from '@material-ui/data-grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
-
+import ItemTable from './ItemTable';
+import AddItem from './AddItem';
+import OrderableItemsTable from './OrderableItemsTable';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 400,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    orderableModal: {
+        width: 400,
+    },
+    addItemModal: {
+        width: 800,
+    }
+
 }));
 
 
@@ -42,6 +50,7 @@ export default function OrderableTable(props) {
     const [open, setOpen] = useState(false);
     const [openAddItem, setOpenAddItem] = useState(false);
     const [orderable_name, setOrderable_name] = useState("");
+    const [orderable, setOrderable] = useState(null);
     const [price, setPrice] = useState(0.0);
     const [discount, setDiscount] = useState(0.0);
     const [inStock, setInStock] = useState(false);
@@ -55,25 +64,31 @@ export default function OrderableTable(props) {
         { field: 'price', type: 'number', headerName: 'Price', width: 130 },
         { field: 'instock', headerName: 'In Stock', width: 120 },
         {field: "",
-        headerName: "Edit Orderable",
-        disableClickEventBubbling: true,
-        renderCell: (params) => {
-            return <Button onClick={()=> {
-                setOrderable_name(params.row.name);
-                setPrice(params.row.price);
-                setDiscount(params.row.discount);
-                setInStock(params.row.instock);
-                setOpen(true);
-            }}>Edit</Button>
-        }
+            headerName: "Edit Orderable",
+            disableClickEventBubbling: true,
+            renderCell: (params) => {
+                return <Button onClick={()=> {
+                    setOrderable(params.row.orderable)
+                    setOrderable_name(params.row.name);
+                    setPrice(params.row.price);
+                    setDiscount(params.row.discount);
+                    setInStock(params.row.instock);
+                    setOpen(true);
+                }}>Edit</Button>
+            }
         }
     ];
     
     useEffect(() => {
+        updateTable();
+    }, []);
+
+    async function updateTable() {
         getOrderables().then(res => {
             setOrderables(createData(res));
         });
-    }, []);
+        setOrderable(orderable);
+    }
 
     async function updateOrderable() {
         await axios.post('http://localhost:9000/restaurant/update_orderable', {
@@ -99,7 +114,8 @@ export default function OrderableTable(props) {
                 name: orderables[i].orderable_name,
                 discount: orderables[i].discount,
                 price: orderables[i].price,
-                instock: orderables[i].instock
+                instock: orderables[i].instock,
+                orderable: orderables[i]
             };
             it.push(newOrderable);
         }
@@ -140,6 +156,7 @@ export default function OrderableTable(props) {
             <p id="simple-modal-description">
                 Item, options, quantity.
             </p>
+            <OrderableItemsTable orderable={orderable}/>
             <TextField type="number" value={discount} onChange={(e) => setDiscount(Math.max(e.target.value, 0))}/>
             <TextField type="number" value={price} onChange={(e) => setPrice(Math.max(e.target.value, 0))}/>
             <Select
@@ -170,8 +187,10 @@ export default function OrderableTable(props) {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
     >
-        <div style={modalStyle} className={classes.paper}>
+        <div style={modalStyle} className={`${classes.paper} ${classes.addItemModal}`}>
             ASDASDASDASDAS
+            <ItemTable restaurant_id={props.restaurant.restaurant_id} orderable_name={orderable_name}/>
+            <AddItem/>
         </div>
     </Modal>
       </>

@@ -9,6 +9,7 @@ import ItemTable from './ItemTable';
 import AddItem from './AddItem';
 import AddOrderable from './AddOrderable';
 import OrderableTable from './OrderableTable';
+import DeliveryTable from './DeliveryTable';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -16,8 +17,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DeliveryHomePage(props) {
     return ( <div>
-        <h1>HOMEPAGE</h1>
+        <h1>DELIVERY INTERFACE</h1>
         <div>{JSON.stringify(props.user)}</div>
+        <DeliveryTable/>
     </div>);
   
 }

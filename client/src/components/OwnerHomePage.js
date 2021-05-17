@@ -9,6 +9,9 @@ import ItemTable from './ItemTable';
 import AddItem from './AddItem';
 import AddOrderable from './AddOrderable';
 import OrderableTable from './OrderableTable';
+import OrderableItemsTable from './OrderableItemsTable';
+import OrdersTable from './OrdersTable';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -72,11 +75,9 @@ export default function OwnerHomePage(props) {
             <div>
                 <h1>Restaurant: {managedRestaurant.name} {managedRestaurant.restaurant_id}</h1>
             </div>
-            <ItemTable/>
-            <AddItem/>
             <OrderableTable restaurant={managedRestaurant}/>
             <AddOrderable/>
-            
+            <OrdersTable/>
         </div>
       );
 

@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import OrderableList from './OrderableList';
+import Reviews from './Reviews';
 
 const useStyles = makeStyles((theme) => ({
 }));
@@ -17,6 +18,7 @@ export default function Restaurant(props) {
     <div>
         <h1>Restaurant {id}</h1>
         <OrderableList restaurant_id={id}/>
+        <Reviews restaurant_id={id}/>
     </div>
   );
 }

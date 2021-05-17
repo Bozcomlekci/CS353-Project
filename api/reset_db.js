@@ -96,15 +96,15 @@ async function createTables() {
                     FOREIGN KEY (item_id) references Item(item_id));`);
 
         await client.query(`CREATE TABLE Specify ( item_id INTEGER, option_name VARCHAR, 
-                    order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, item_index INTEGER, exists BOOLEAN, 
-                    PRIMARY KEY ( item_id, option_name, order_id, restaurant_id, orderable_name, item_index ), 
+                    order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, in_order_index INTEGER,
+                    PRIMARY KEY ( item_id, option_name, order_id, restaurant_id, orderable_name, in_order_index ), 
                     FOREIGN KEY (item_id) references Item(item_id), 
                     FOREIGN KEY (option_name) references Option_(name),
                     FOREIGN KEY (order_id) references Orders(order_id),
                     FOREIGN KEY (orderable_name, restaurant_id) references Orderable(orderable_name, restaurant_id));`);
 
-        await client.query(`CREATE TABLE ConsistOf (order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, quantity INTEGER,
-                        PRIMARY KEY (order_id, restaurant_id, orderable_name),
+        await client.query(`CREATE TABLE ConsistOf (order_id INTEGER, restaurant_id INTEGER, orderable_name VARCHAR, in_order_index INTEGER, quantity INTEGER,
+                        PRIMARY KEY (order_id, restaurant_id, orderable_name, in_order_index),
                         FOREIGN KEY (order_id) references Orders (order_id),
                         FOREIGN KEY (orderable_name, restaurant_id) references Orderable(orderable_name, restaurant_id));`);
 
@@ -336,6 +336,7 @@ async function addRecords() {
         await client.query("INSERT INTO SupportStaff VALUES ('ABC', 1, true);");
         await client.query("INSERT INTO Users VALUES ('Delivery1', 'Delivery1', 'Delivery1', '2016-03-03', 'Delivery1@gmail.com', 'Delivery1');");
         await client.query("INSERT INTO DeliveryPerson VALUES ('Delivery1', 10, false);");
+        
     } catch (err) {
         console.log(err.stack);
     }

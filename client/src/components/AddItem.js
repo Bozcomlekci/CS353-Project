@@ -44,7 +44,7 @@ export default function AddItem(props) {
                 <MenuItem value={"food"}>food</MenuItem>
                 <MenuItem value={"beverage"}>beverage</MenuItem>
             </Select>
-            <Button onClick={()=>addItem()}>Add Item</Button>
+            <Button onClick={()=>addItem()}>Add Item To Database</Button>
             
         </div>);
 }

@@ -44,10 +44,7 @@ writeReview = (request, response) => {
                         client.query('INSERT INTO HasReview VALUES($1, $2)', [restaurant_id, newlyInsertedReviewId], (err2, result2) => {
                             if(err2){
                                 response.status(401).send("Add Review Unsuccessful");
-                            }
-                            else {
-                                response.send("Add Review Successful");
-                            }       
+                            }   
                         });
                     }
                 });
@@ -67,9 +64,6 @@ writeReview = (request, response) => {
                             if(err2){
                                 response.status(401).send("Add Review Unsuccessful");
                             }
-                            else {
-                                response.send("Add Review Successful");
-                            }       
                         });
                     }
                 });
@@ -88,16 +82,15 @@ writeReview = (request, response) => {
                         client.query('INSERT INTO SeeReview VALUES($1, $2)', [newlyInsertedReviewId, username], (err2, result2) => {
                             if(err2){
                                 response.status(401).send("Add Review Unsuccessful");
-                            }
-                            else {
-                                response.send("Add Review Successful");
-                            }       
+                            }  
                         });
                     }
                 });
               }
             })
         })
+        response.send("Add Review Successful");
+
     } 
     else {
         response.status(401).send("Not logged in.")
@@ -136,9 +129,11 @@ getReview = (request, response) => {
 
 getRestaurantReviews = (request, response) => {
     
-    restaurant_id = request.query.restaurant_id;
+    let restaurant_id = request.query.restaurant_id;
+    console.log(request.query);
     let sess = request.session;
-    if(sess.loggedIn){
+    console.log(sess.loggedIn, 'LOGGGEDIN', restaurant_id);
+    //if(sess.loggedIn){
         let pool = getPool();
         pool.connect((err, client, release) => {
             if (err) {
@@ -148,9 +143,10 @@ getRestaurantReviews = (request, response) => {
             + 'Rev.delivery_comment, Rev.restaurant_response '
            + 'FROM HasReview HRev NATURAL JOIN Review Rev '
            + 'WHERE HRev.restaurant_id = $1', [restaurant_id], (err, result) => {
-              
+              release();
               if (err) {
-                response.status(401).send("List Reviews Unsuccessful");
+                  return console.error('Error acquiring client', err.stack)
+                  response.status(401).send("List Reviews Unsuccessful");
               }
 
               else {
@@ -158,10 +154,10 @@ getRestaurantReviews = (request, response) => {
               }
             })
         })
-    } 
-    else {
-        response.status(401).send("Not logged in.")
-    }   
+    //} 
+    //else {
+    //    response.status(401).send("Not logged in.")
+    //}   
 }
 
 restaurantWriteResponse = (request, response) => {

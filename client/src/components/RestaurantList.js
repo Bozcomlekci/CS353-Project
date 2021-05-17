@@ -4,9 +4,39 @@ import TextField from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import OrderableList from './OrderableList';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { Container } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    height: 150,
+    width: 200,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
 }));
+
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#f44336',
+    },
+    secondary: {
+      main: '#f44336',
+    },
+  },
+});
+
 
 export default function RestaurantList(props) {
   const [restaurants, setRestaurants] = useState(undefined);
@@ -30,19 +60,34 @@ export default function RestaurantList(props) {
       let rendered = [];
       for (const restaurant of restaurants) {
         rendered.push(
-        <div>
-          <a href={"./" + restaurant.restaurant_id}>{restaurant.name}</a>
-          <div>Rating:{restaurant.average_rating}</div>
-          <div>Open:{String(restaurant.is_open)}</div>
-          <div>City:{restaurant.city}</div>
-          <div>County:{restaurant.county}</div>
-        </div>
+        <Paper className={classes.paper} elevation={3}>
+              <a href={"./" + restaurant.restaurant_id}
+              >
+              <Typography variant="h5">
+              {restaurant.name}
+              </Typography>
+              </a>
+          <Box color='blue'>
+            <div>
+            <Typography variant="h6">
+              Rating: {restaurant.average_rating}
+            </Typography>
+             
+            </div>
+            <div>Open: {String(restaurant.is_open)}</div>
+            <div>City: {restaurant.city}</div>
+            <div>County: {restaurant.county}</div>
+          </Box>
+        </Paper>
         )
       }
       return rendered;
   }
-  return restaurants ? (<div>
+  return restaurants ? (<div className={classes.root}>
+  
+    <Grid  backgroundColor='blue'>
     {renderRestaurants()}
+    </Grid>
   </div>) : (
     <span>Loading restaurants</span>
   );

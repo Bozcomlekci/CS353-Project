@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import { Container } from '@material-ui/core';
 
 class Navbar extends React.Component {
 
@@ -24,18 +30,45 @@ class Navbar extends React.Component {
   render() {
     let button = null;
     if (this.props.loggedIn) {
-      button = <Button href="#" color="primary" onClick={this.logout}>Logout</Button>;
+      button = <Button href="#" color="white" onClick={this.logout}>Logout</Button>;
     }
     
     return (
-      <nav>
-        <a href="/">YemekKutusu</a>
-        <a href="/restaurants/">Restaurants</a>
-        <a href="/addresses">Addresses</a>
-        <a href="/B">Orders</a>
-        <a href="/box">Box</a>
-        {button}
-      </nav>
+      <div  style={{
+        backgroundColor: 'blue',
+        width: '100%',
+        height: '20%'
+        }}>
+
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">
+              YEMEK KUTUSU
+            </Typography>
+            
+            <Container>
+            \ <a href="/">YemekKutusu</a> \
+            </Container>
+            <Container>
+            \ <a href="/restaurants/">Restaurants</a> \
+            </Container>
+            <Container>
+            \ <a href="/addresses">Addresses</a> \
+            </Container>
+            <Container>
+            \ <a href="/B">Orders</a> \
+            </Container>
+            <Container>
+            \ <a href="/box">Box</a>  \
+            </Container>
+            {button}
+          </Toolbar>
+         
+          
+          
+        </AppBar>
+
+      </div>
     );
   }
 }

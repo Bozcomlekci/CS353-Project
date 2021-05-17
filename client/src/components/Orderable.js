@@ -9,6 +9,13 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { Container } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     orderable: {
@@ -150,14 +157,21 @@ export default function Orderable(props) {
   return (
     <>
       <div className={classes.orderable}>
+          <Paper className={classes.paper} elevation={3} color='blue'>
           <div className={classes.orderableInfo}>
-              <Button onClick={() => handleOpen()}>ADD TO BOX</Button>
-              <div>{props.orderable.orderable_name}</div>
-              <div>{props.orderable.price}</div>
+                <Typography variant="h6">
+                  {props.orderable.orderable_name}
+                </Typography>
+                <Typography variant="h6">
+                  {props.orderable.price}
+                </Typography>              
+              
           </div>
           <div className={classes.orderableItems}>
               {getMenuItemNamesAndQuantity()}
           </div>
+          <Button onClick={() => handleOpen() } color="primary" >ADD TO BOX</Button>
+          </Paper>
       </div>
 
       <Modal

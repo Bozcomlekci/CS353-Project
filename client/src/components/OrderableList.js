@@ -13,6 +13,9 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
+  orderableList: {
+
+  }
 }));
 
 export default function OrderableList(props) {
@@ -39,17 +42,18 @@ export default function OrderableList(props) {
 
   function renderOrderables() {
       let rendered = [];
+      console.log(orderables);
       for (const orderable of orderables) {
         rendered.push(
-          <Paper className={classes.paper} elevation={3}>
-              <Orderable orderable={orderable} restaurant_id={props.restaurant_id}/>
-          </Paper>
-        )
+          <Orderable orderable={orderable} restaurant_id={props.restaurant_id}/>
+        );
       }
       return rendered;
   }
 
-  return orderables ? renderOrderables() : (
+  return orderables ? <div className={classes.orderableList}>
+    {renderOrderables()}
+  </div> : (
     <span>Loading orderables</span>
   );
 }

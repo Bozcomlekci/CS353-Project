@@ -135,9 +135,4 @@ class App extends React.Component {
     }
   }
 }
-/*
-            <Route exact path="/restaurants/1">
-              <Restaurant restaurant_id={1}/>
-            </Route>
-*/
 export default App;

@@ -26,7 +26,7 @@ addToBox = (request, response) => {
         console.log(orderable.options.toString() == request.session.box[i].options.toString());
         if (orderable.orderable_name == request.session.box[i].orderable_name
             && orderable.options.toString() == request.session.box[i].options.toString()) {
-                request.session.box[i].quantity += 1;
+                request.session.box[i].quantity += orderable.quantity;
                 exists = true;
         }
     }

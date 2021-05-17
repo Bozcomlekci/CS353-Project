@@ -19,7 +19,6 @@ search_method = (request, response) => {
             }
 
             if(what_to_search.localeCompare("Item") == 0){
-                console.log("alo");
                 search_value = '%' + search_value + '%';
                 client.query("select * from Orderable Natural Join Contain NATURAL JOIN Item join Restaurant on Restaurant.restaurant_id = Orderable.restaurant_id where Item.name like $1 or Orderable_name like $1;", 
                 [search_value], (err1, result1) => { 
@@ -29,20 +28,21 @@ search_method = (request, response) => {
                         response.status(401).send("Get Info Unsuccessful");
                     }
                     else{
-                        console.log("alo2");
 
+                        
                         release();
                         response.status(200).json(result1.rows);
                     }
-                })
+                    })
             }
+            
+            
             else if (what_to_search.localeCompare("Restaurant") == 0){
                 search_value = '%' + search_value + '%';
                 client.query("select * from Restaurant NATURAL JOIN Orderable NATURAL JOIN Address where restaurant.name like $1 ;", 
                 [search_value], (err1, result1) => { 
                     if(err1){
                         console.log(err1);
-
                         release();
                         response.status(401).send("Get Info Unsuccessful");
                     }

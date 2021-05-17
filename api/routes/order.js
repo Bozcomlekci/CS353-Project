@@ -144,7 +144,7 @@ getCustomerOrders = (request, response) => {
                             quantity: orderable.quantity
                         }
                         order.orderables.push(order_orderable);
-                        order.total_price += orderable.price;
+                        order.total_price += orderable.price * orderable.quantity;
                         i++;
                         orderable = result1.rows[i];
                         if (i == result1.rows.length) {
@@ -352,6 +352,7 @@ getDeliveryRequests = (request, response) => {
                 release();
                 return console.error('Error executing query', err.stack)
             }
+            release();
             response.send(result.rows);
         });
     });

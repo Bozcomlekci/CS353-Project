@@ -211,6 +211,76 @@ async function createTables() {
         + ' select * from Delivery_Person_Orders_Prices d1, Delivery_Person_Orders d2 ' 
         + ' where d1.oid = d2.order_id; ');
 
+        await client.query(`CREATE OR REPLACE FUNCTION assigned_ticket_insertion()
+        RETURNS TRIGGER
+        AS
+        $$
+            DECLARE support_username VARCHAR;
+        
+        BEGIN
+        IF EXISTS (SELECT * FROM SupportStaff WHERE is_free = true) THEN
+            
+            SELECT username into support_username FROM SupportStaff WHERE is_free=true LIMIT 1;
+            
+            UPDATE SupportStaff SET is_free = false, current_ticket_id = NEW.ticket_id WHERE username = support_username;
+            INSERT INTO AssignedToTicket VALUES(NEW.ticket_id, support_username);
+        END IF;
+        RETURN NEW;
+        END;
+        $$
+        LANGUAGE 'plpgsql';
+        
+        
+        CREATE TRIGGER assign_new_ticket
+          AFTER INSERT ON
+          SupportTicket
+          FOR EACH ROW
+          EXECUTE PROCEDURE assigned_ticket_insertion();
+          
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        CREATE OR REPLACE FUNCTION assign_update()
+        RETURNS TRIGGER
+        AS
+        $$
+            DECLARE ticket_id_var INTEGER;
+        
+        BEGIN
+        IF EXISTS (SELECT * FROM SupportTicket S WHERE S.ticket_id NOT IN (select ASA.ticket_id from AssignedToTicket ASA)) THEN
+            
+            SELECT S.ticket_id into ticket_id_var FROM SupportTicket S 
+                   WHERE S.ticket_id NOT IN (select ASA.ticket_id from AssignedToTicket ASA) LIMIT 1;
+            
+                  
+            UPDATE SupportStaff SET is_free = false, current_ticket_id = ticket_id_var WHERE username = NEW.username;
+            INSERT INTO AssignedToTicket VALUES(ticket_id_var, NEW.username);
+        END IF;
+        RETURN NEW;
+        END;
+        $$
+        LANGUAGE 'plpgsql';
+        
+        
+        
+        CREATE TRIGGER assign_existing_ticket AFTER UPDATE OF is_free ON SupportStaff
+        FOR EACH ROW
+        WHEN (pg_trigger_depth() = 0)
+        EXECUTE PROCEDURE assign_update();`);
+
+        
+
         
 
         

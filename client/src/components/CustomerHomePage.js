@@ -4,8 +4,26 @@ import TextField from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import BoxItem from './BoxItem';
+import OrderableList from './OrderableList';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { Container } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    height: 100,
+    width: 500,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
   signupBox: {
      margin: '0 auto',
  
@@ -46,6 +64,15 @@ export default function CustomerHomePage(props) {
 
   return (<div>
   <h1>HOMEPAGE</h1>
-  <div>{JSON.stringify(props.user)}</div>
+  <Paper className={classes.paper} elevation={3} color='blue'>
+            <div>
+            <Typography variant="h5">
+              Username: {props.user.username}
+            </Typography>
+            <Typography variant="h5">
+              Usertype: {props.user.type}
+            </Typography>
+            </div>
+  </Paper>
   </div>);
 }

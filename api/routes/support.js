@@ -11,18 +11,35 @@ writeTicket = (request, response) => {
     date = request.body.date;
     subject = request.body.subject;
     content = request.body.content;
-    username = request.body.username;
-    type = request.body.type;
+    console.log(request.session.user);
+    username = request.session.user.username;
+    type = request.session.user.type;
     
 
     if (type.localeCompare("Customer") == 0) {
         pool.query("INSERT INTO SupportTicket VALUES(DEFAULT, $1, $2, $3, NULL) RETURNING ticket_id", [date, subject, content], (error, result) => {
             if (error) {
+                release();
+
                 response.status(401).send("Error Creating Support Ticket");
             }
             else {
                 console.log(result.rows);
                 newlyInsertedTicketId = result.rows[0].ticket_id;
+                is_food = request.body.is_food;
+                order_id = request.body.order_id;
+                if(is_food){
+                    pool.query("INSERT INTO HasTicket VALUES($1, $2)", [newlyInsertedTicketId, order_id], (error1, result) => {
+                        if (error1) {
+                            release();
+                            console.log(newlyInsertedTicketId);
+    
+                            response.status(401).send("Error Creating Support Ticket");
+                        }
+                        
+                    } )
+                }
+               
                 pool.query("INSERT INTO SubmitTicket VALUES($1, $2)", [newlyInsertedTicketId, username], (error1, result) => {
                     if (error1) {
                         console.log(newlyInsertedTicketId);
@@ -31,28 +48,32 @@ writeTicket = (request, response) => {
                     }
                     else {
                         response.status(200).send("Support Ticket Successfully Created");
-                        //assignTicket(request, response); // May want to call later
-                        assignTicket(newlyInsertedTicketId); // May want to call later
                     }
                 } )
-                //response.status(200).send("Error Creating Support Ticket");
             }
         } )
     }
     else if(type.localeCompare("SupportStaff") == 0){
+        
         supportResponse = request.body.supportResponse;
         pool.query("UPDATE SupportTicket SET response = $1 WHERE EXISTS(SELECT * FROM AssignedToTicket NATURAL JOIN SupportTicket WHERE response = NULL AND username = $2)",
             [supportResponse, username], (error, result) => {
                 if (error) {
+                    release();
+
                         response.status(401).send("Error Answering Support Ticket")
                 }
                 else {
                     pool.query("UPDATE SupportStaff SET is_free = true WHERE username=$1",
                     [username], (error, result) => {
                         if (error) {
+                            release();
+
                             response.status(401).send("Error Freeing Support Staff")
                         }
                         else {
+                            release();
+
                             response.status(200).send("Response Sent for the Support Ticket");
                         }
                     })

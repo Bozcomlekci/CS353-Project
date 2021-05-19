@@ -39,6 +39,7 @@ export default function Box(props) {
         console.log("AMOUNT: ", amount);
       }
       setAmount(amount);
+      window.sessionStorage.setItem("amount", amount);
     }
   }
 
@@ -90,11 +91,17 @@ export default function Box(props) {
     <div>
       {renderBox()}
     </div>
-    <div>
-      <Button href="/finalize_order">Make Order</Button>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+    }}>
+      <Button style={{
+        backgroundColor: '#f50057',
+        margin: '15px'
+      }} href="/finalize_order">Make Order</Button>
+      <p>Order Total: {amount} TL</p>
     </div>
     <div>
-      {amount}
     </div>
   </div>) : (
     <span>Loading box</span>

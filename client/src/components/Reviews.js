@@ -7,10 +7,15 @@ import Button from '@material-ui/core/Button';
 import OrderableList from './OrderableList';
 
 const useStyles = makeStyles((theme) => ({
+    review: {
+        border: '1px solid black',
+        padding: '10px'
+    }
 }));
 
 export default function Reviews(props) {
     const [reviews, setReviews] = useState(null);
+    const classes = useStyles();
 
     useEffect(() => {
         getReviews().then(res => {
@@ -30,12 +35,11 @@ export default function Reviews(props) {
     function renderReviews() {
         let it = [];
         for (let i = 0; i < reviews.length; i++) {
-            it.push(<div>
-                <div>Delivery Rating: {reviews[i].delivery_rating}</div>
+            it.push(<div className={classes.review}>
                 <div>Restaurant Rating: {reviews[i].restaurant_rating}</div>
+                <div>Delivery Rating: {reviews[i].delivery_rating}</div>
                 <div>Restaurant Comment:: {reviews[i].restaurant_comment}</div>
                 <div>Delivery Comment:: {reviews[i].delivery_comment}</div>
-                <div>Delivery Rating: {reviews[i].delivery_rating}</div>
                 {reviews[i].restaurant_response ? <div>Restaurant Response: {reviews[i].restaurant_response}</div> : <div></div>}
             </div>)
         }
@@ -44,6 +48,7 @@ export default function Reviews(props) {
 
     return reviews ? (
         <div>
+            <h2>Reviews</h2>
             {renderReviews()}
         </div>) : (
             <span>Loading Reviews</span>

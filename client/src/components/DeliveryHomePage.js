@@ -17,9 +17,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DeliveryHomePage(props) {
     return ( <div>
-        <h1>DELIVERY INTERFACE</h1>
-        <div>{JSON.stringify(props.user)}</div>
-        <DeliveryTable/>
+        <h1>Welcome, {props.user.username}</h1>
+        <h3>Delivery Request Table</h3>
+        <div style={{
+            border: '1px black solid',
+            margin: '10px'
+        }}>
+            <DeliveryTable/>
+        </div>
     </div>);
   
 }

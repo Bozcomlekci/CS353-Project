@@ -82,13 +82,14 @@ getUserNotReviewedOrders = (request, response) => {
             }
 
             client.query("SELECT order_id FROM Orders NATURAL JOIN CompleteOrder "
-            + " where username = $1 and order_id not in (select order_id from Review) ",
+            + " where username = $1 and order_id not in (select order_id from Review) AND Orders.status = 'complete'",
             [username], (err1, result1) => {
+            release();
             if(err1){
                 return console.error('Error acquiring client', err.stack)
             }
             else{
-                response.json(result.rows);
+                response.json(result1.rows);
             }
         })
     })
@@ -347,7 +348,7 @@ getDeliveryRequests = (request, response) => {
         if (err) {
             return console.error('Error acquiring client', err.stack)
         }
-        client.query("SELECT * FROM RequestForDelivery NATURAL JOIN DeliveredTo NATURAL JOIN Address  NATURAL JOIN (SELECT order_id, status FROM Orders) AS ord WHERE username = $1",[request.session.user.username], (err, result) => {
+        client.query("SELECT * FROM RequestForDelivery NATURAL JOIN DeliveredTo NATURAL JOIN Address  NATURAL JOIN (SELECT order_id, status FROM Orders) AS ord WHERE username = $1 AND status !='complete'",[request.session.user.username], (err, result) => {
             if (err) {
                 release();
                 return console.error('Error executing query', err.stack)

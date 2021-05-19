@@ -10,6 +10,9 @@ import { Container } from '@material-ui/core';
 import TextField from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Modal from '@material-ui/core/Modal';
+
+
 
 class Navbar extends React.Component {
 
@@ -17,10 +20,24 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       searchValue: "",
-      type: "restaurant"
+      type: "restaurant",
+      body: null,
+      open: false
     };
   }
 
+  makeSearch = async () => {
+    const result = await axios.get('http://localhost:9000/search',{
+      params:{
+        search_value: this.state.searchValue,
+        what_to_search: this.state.type
+      }}, {withCredentials: true});
+    return result.data;
+  }
+
+  search = async () => {
+    this.makeSearch().then(res => this.setState({body: res}));
+  }
 
   logout = async () => {
 
@@ -39,6 +56,8 @@ class Navbar extends React.Component {
     onLogout(sess.data);
   }
 
+  
+
   render() {
     let button = null;
     if (this.props.loggedIn) {
@@ -47,11 +66,31 @@ class Navbar extends React.Component {
     
       return (
         <div  style={{
-          backgroundColor: 'blue',
           width: '100%',
           height: '20%'
           }}>
   
+          <AppBar position="static" color="secondary">
+            <Toolbar>
+              <Typography variant="h6">
+                YEMEK KUTUSU
+              </Typography>
+              
+              <Container>
+              <Button href="/">YemekKutusu</Button>
+              </Container>
+              <Container>
+              <Button href="/restaurants/">Restaurants</Button>
+              </Container>
+              <Container>
+              <Button href="/addresses">Addresses</Button>
+              </Container>
+              <Container>
+              <Button href="/orders">Orders</Button>
+              </Container>
+              <Container>
+              <Button href="/box">Box</Button>
+              </Container>
         <Select
           labelId="type-label"
           id="type"
@@ -64,33 +103,10 @@ class Navbar extends React.Component {
       </Select>
         <TextField id="outlined-search" label="Search field" type="search" variant="outlined" placeholder="Search Items" onChange={(e) => {this.setState({searchValue: e.target.value})}}/>
          <Button onClick={()=>alert(this.state.searchValue)}>Search</Button>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h6">
-                YEMEK KUTUSU
-              </Typography>
-              
-              <Container>
-              \ <a href="/">YemekKutusu</a> \
-              </Container>
-              <Container>
-              \ <a href="/restaurants/">Restaurants</a> \
-              </Container>
-              <Container>
-              \ <a href="/addresses">Addresses</a> \
-              </Container>
-              <Container>
-              \ <a href="/orders">Orders</a> \
-              </Container>
-              <Container>
-              \ <a href="/box">Box</a>  \
-              </Container>
               {button}
-            </Toolbar>
-           
-            
-            
+            </Toolbar> 
           </AppBar>
+          
           </div>
       );
   }

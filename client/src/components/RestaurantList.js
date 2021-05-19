@@ -14,28 +14,19 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row'
   },
   paper: {
     height: 150,
     width: 200,
-    padding: theme.spacing(1),
+    padding: '25px',
+    margin: '30px',
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
 }));
 
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#f44336',
-    },
-    secondary: {
-      main: '#f44336',
-    },
-  },
-});
 
 
 export default function RestaurantList(props) {
@@ -85,9 +76,7 @@ export default function RestaurantList(props) {
   }
   return restaurants ? (<div className={classes.root}>
   
-    <Grid  backgroundColor='blue'>
     {renderRestaurants()}
-    </Grid>
   </div>) : (
     <span>Loading restaurants</span>
   );

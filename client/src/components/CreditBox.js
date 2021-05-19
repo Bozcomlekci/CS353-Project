@@ -14,7 +14,11 @@ const useStyles = makeStyles((theme) => ({
     "& p, h3": {
       margin: "0",
       padding: "0"
-    }
+    },
+    height: 'fit-content',
+    margin: 'auto 100px',
+    padding: '50px',
+    fontSize: '28px'
   },
   paper: {
     position: 'absolute',
@@ -46,6 +50,7 @@ export default function CreditBox(props) {
   useEffect(() => {
     getCredit().then(res => {
         setCredit(res);
+        window.sessionStorage.setItem("credit", res);
     });
   }, []);
 
@@ -77,7 +82,9 @@ export default function CreditBox(props) {
           <Button onClick={() => {
                 addCredit(amount).then(
                   getCredit().then(res => {
-                setCredit(res)}))}}>Add Credit</Button>
+                setCredit(res)}))}} style={{
+                  fontSize: '20px'
+                }} variant="outlined" color="secondary">Add Credit</Button>
         </div>
     </Modal>
     </>

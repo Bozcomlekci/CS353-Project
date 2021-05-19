@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    margin: '98px'
   },
   signupBox: {
      margin: '0 auto',
@@ -52,19 +53,25 @@ export default function CustomerHomePage(props) {
   const classes = useStyles();
 
 
-  return (<div>
-  <h1>HOMEPAGE</h1>
-  <Paper className={classes.paper} elevation={3} color='blue'>
-            <div>
-            <Typography variant="h5">
-              Username: {props.user.username}
-            </Typography>
-            <Typography variant="h5">
-              Usertype: {props.user.type}
-            </Typography>
-            </div>
-  </Paper>
-  <AddressBox/>
-  <CreditBox/>
+  return (
+  <div>
+    <h1>CUSTOMER HOMEPAGE</h1>
+    <div style = {{
+      display: 'flex',
+      flexDirection: 'row'
+    }}>
+      <Paper className={classes.paper} elevation={3} color='blue'>
+                <div>
+                <Typography variant="h5">
+                  Username: {props.user.username}
+                </Typography>
+                <Typography variant="h5">
+                  Usertype: {props.user.type}
+                </Typography>
+                </div>
+      </Paper>
+      <AddressBox/>
+      <CreditBox/>
+    </div>
   </div>);
 }

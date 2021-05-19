@@ -46,8 +46,14 @@ export default function OwnerHomePage(props) {
     for (let i = 0; i < restaurants.length; i++) {
         let restaurant = restaurants[i];
         rendered.push(
-        <div>
-        <Button onClick={() => changeManagedRestaurant(restaurant)}>{restaurant.name}</Button>
+        <div style={{
+          border: '1px solid black',
+          padding: '20px',
+          margin: '15px'
+        }}>
+        <Button onClick={() => changeManagedRestaurant(restaurant)}  style={{
+          backgroundColor: '#f50057'
+        }}>{restaurant.name}</Button>
         <div>Rating:{restaurant.average_rating}</div>
         <div>Open:{String(restaurant.is_open)}</div>
         <div>City:{restaurant.city}</div>
@@ -63,21 +69,56 @@ export default function OwnerHomePage(props) {
   }
   else if (managedRestaurant == null && restaurants != null) {
       return ( <div>
-        <h1>HOMEPAGE</h1>
-        <div>{JSON.stringify(props.user)}</div>
-        <div>{renderRestaurants()}</div>
+        <h1>Welcome, {props.user.username}</h1>
+        <h1>Your Restaurants</h1>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row'
+        }}>{renderRestaurants()}</div>
     </div>)
   }
   else {
     return  (
         <div>
-            <Button onClick={() => changeManagedRestaurant(null)}>Change Restaurant</Button>
-            <div>
+            <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+            }}>
                 <h1>Restaurant: {managedRestaurant.name} {managedRestaurant.restaurant_id}</h1>
+                <Button onClick={() => changeManagedRestaurant(null)} style={{
+                  backgroundColor: '#f50057',
+                  padding: '5px 5px',
+                  margin: '10px 10px'
+                }}>Change Restaurant</Button>
             </div>
-            <OrderableTable restaurant={managedRestaurant}/>
-            <AddOrderable/>
+            <h3>Orderables</h3>
+            <div style={{
+              margin: '10px',
+              padding: '10px',
+              border: '1px solid black',
+              width: '50%'
+            }}>
+              <OrderableTable restaurant={managedRestaurant}/>
+            </div>
+            <h3>Add Orderable</h3>
+            <div style={{
+              margin: '10px',
+              padding: '10px',
+              border: '1px solid black',
+              width: 'fit-content'
+            }}>
+              <AddOrderable/>
+            </div>
+            <h3>Orders</h3>
+            <div style={{
+              margin: '10px',
+              padding: '10px',
+              border: '1px solid black',
+              width: '60%'
+            }}>
             <OrdersTable/>
+            </div>
         </div>
       );
 

@@ -75,11 +75,14 @@ export default function Signup(props) {
   return (
     <div>
       <div  style={{
-        backgroundColor: 'blue',
+        backgroundColor: '#f50057',
         width: '100%',
-        height: '10%'
+        height: '10%',
         }}>
-          <p className={classes.titleText}>YEMEK KUTUSU</p>
+          <p style={{
+            textAlign: 'center',
+            margin: '0 0 50px 0'
+          }} className={classes.titleText}>YEMEK KUTUSU</p>
         </div>
       <div className={classes.signupBox}>
         
@@ -111,7 +114,7 @@ export default function Signup(props) {
                     <FormControlLabel value="SupportStaff" control={<Radio />} label="Support" />
                 </RadioGroup>
         
-            <Button color="primary" variant="contained" type="submit">SIGNUP</Button>
+            <Button color="secondary" variant="contained" type="submit">SIGNUP</Button>
           </form>
         </div>
     

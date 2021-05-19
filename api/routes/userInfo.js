@@ -26,6 +26,7 @@ getInfo = (request, response) => {
                     //customer
                     if(userType.localeCompare("Customer") == 0){
                         client.query('SELECT * from Customer where username = $1', [sess.user.username], (err, result2) => {          
+                            release();
                             if (err) {
                               response.status(401).send("Get Info Unsuccessful");
                             }

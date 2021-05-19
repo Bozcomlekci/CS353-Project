@@ -15,6 +15,7 @@ import CustomerHomePage from './components/CustomerHomePage';
 import OwnerHomePage from './components/OwnerHomePage';
 import DeliveryHomePage from './components/DeliveryHomePage';
 import Orders from './components/Orders';
+import SupportTicket from './components/SupportTicket';
 
 class App extends React.Component {
   constructor(props) {
@@ -123,8 +124,8 @@ class App extends React.Component {
             <Route exact path="/restaurants/">
               <RestaurantList/>
             </Route>
-            <Route exact path="/support/listtickets">
-              <RestaurantList/>
+            <Route exact path="/support/">
+              <SupportTicket/>
             </Route>
             <Route path="/">
               {this.HomePage(this.state.user)}

@@ -11,12 +11,28 @@ export default function BoxItem(props) {
   const [quantity, setQuantity] = useState(props.quantity)
   const classes = useStyles();
 
-    return (<div>
-        {props.orderable.orderable_name}
+    return (<div style={{
+      border: '1px solid black',
+      width: 'fit-content',
+      margin: '15px',
+      padding: '15px'
+    }}>
+        <p>Orderable Name: {props.orderable.orderable_name}</p>
+        <p>Orderable Price: {props.orderable.price} TL</p>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}>
+          <p>Quantity:</p>
+          
+          <TextField style={{
+            width: '50px'
+          }} type="number" value={quantity} onChange={(e) => {
+          setQuantity(Math.max(e.target.value, 0));
+          }}/>
+        </div>
+        <Button onClick={() => props.handleUpdate(props.index, quantity)}>Update Quantity</Button>
         <Button onClick={() => props.handleDelete(props.index)}>Delete</Button>
-        <TextField type="number" value={quantity} onChange={(e) => {
-        setQuantity(Math.max(e.target.value, 0));
-        }}/>
-        <Button onClick={() => props.handleUpdate(props.index, quantity)}>Update</Button>
     </div>);
 }

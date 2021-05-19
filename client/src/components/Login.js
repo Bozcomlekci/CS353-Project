@@ -26,7 +26,19 @@ const useStyles = makeStyles((theme) => ({
   titleText: {
     fontSize: '32px',
     textAlign: 'left',
-    color : 'white'
+    color : 'white',
+    textAlign: 'center',
+    marginRight: '5px',
+    paddingLeft: '85px'
+  },
+  smallerTitleText: {
+    fontSize: '32px',
+    textAlign: 'left',
+    color : 'white',
+    textAlign: 'center',
+    marginRight: '5px',
+    paddingLeft: '85px'
+
   },
   form: {
     '& > *': {
@@ -74,11 +86,16 @@ export default function Login(props) {
       height: '100%'
     }}>
       <div  style={{
-      backgroundColor: 'blue',
+      backgroundColor: '#f50057',
       width: '100%',
-      height: '10%'
+      height: '10%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
       }}>
-        <p className={classes.titleText}>YEMEK KUTUSU</p>
+        <h2 className={classes.titleText}></h2>
+        <h1 className={classes.titleText}>YEMEK KUTUSU</h1>
+        <h2 className={classes.smallerTitleText}>Signup</h2>
       </div>
       <p className={classes.loginText}>Login</p>
       <form className={classes.form} onSubmit={handleSubmit} >

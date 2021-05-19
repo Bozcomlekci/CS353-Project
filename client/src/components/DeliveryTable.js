@@ -9,6 +9,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import Modal from '@material-ui/core/Modal';
 import OptionsTable from './OptionsTable';
 
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
@@ -143,13 +144,13 @@ export default function DeliveryTable(props) {
     }
 
     return requests ? acceptedRequest ? 
-    <div>
-        <h2>ON DELIVERY, ADDRESS:</h2>
-        <div>{requests[0].id}</div>
+    <div style={{
+        margin: '20px',
+        width: 'fit-content'
+    }}>
+        <h2>On delivery to address:</h2>
         <div>{requests[0].street}</div>
-        <div>{requests[0].username}</div>
-        <div>{requests[0].street_name}</div>
-        <div>{requests[0].apt_number}</div>
+        <div>Street/Apt Number: {requests[0].street_number}/{requests[0].apt_number}</div>
         <div>{requests[0].city}</div>
         <div>{requests[0].county}</div>
         <div>{requests[0].zip}</div>

@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     orderableInfo: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     orderableItems: {
 
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
     },
+    absolutePos: {
+      position: 'absolute',
+    }
 }));
 
 function getModalStyle() {
@@ -90,6 +94,7 @@ export default function Orderable(props) {
             result += ", ";
         }
     }
+    console.log(result);
     return result;
   }
 
@@ -140,7 +145,7 @@ export default function Orderable(props) {
   }
 
   const body = (
-    <div style={modalStyle} className={classes.paper}>
+    <div style={modalStyle} className={`${classes.paper} ${classes.absolutePos}`}>
       <h2 id="simple-modal-title">{props.orderable.orderable_name}</h2>
       <p id="simple-modal-description">
         Item, options, quantity.
@@ -163,7 +168,7 @@ export default function Orderable(props) {
                   {props.orderable.orderable_name}
                 </Typography>
                 <Typography variant="h6">
-                  {props.orderable.price}
+                  {props.orderable.price} TL
                 </Typography>              
               
           </div>

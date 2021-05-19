@@ -140,7 +140,7 @@ export default function OrderableTable(props) {
             setOrderables(createData(res))})}>Search</Button>
             <Button onClick={()=>getOrderables().then(res => {
             setOrderables(createData(res))})}>Refresh</Button>
-            <div style={{ height: 400, width: '50%' }}>
+            <div style={{ height: 400, width: '100%' }}>
             <DataGrid rows={orderables} columns={columns} pageSize={5}/>
             </div>
         </div>

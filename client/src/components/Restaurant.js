@@ -8,6 +8,15 @@ import OrderableList from './OrderableList';
 import Reviews from './Reviews';
 
 const useStyles = makeStyles((theme) => ({
+  restaurantClass: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  title: {
+    textAlign: 'center',
+    borderBottom: '1px solid'
+  }
 }));
 
 export default function Restaurant(props) {
@@ -32,9 +41,11 @@ export default function Restaurant(props) {
 
   return restaurant ? (
     <div>
-        <h1> {id} {restaurant.name}</h1>
-        <OrderableList restaurant_id={id}/>
-        <Reviews restaurant_id={id}/>
+        <h1 className={classes.title}>{restaurant.name}</h1>
+        <div className={classes.restaurantClass}>
+          <OrderableList restaurant_id={id}/>
+          <Reviews restaurant_id={id}/>
+        </div>
     </div>
   ) : <span>Loading Restaurant Info</span>;
 }

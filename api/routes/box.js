@@ -52,6 +52,9 @@ addToBox = (request, response) => {
                     return console.error('Error executing query', err.stack);
                 }
                 let options = result.rows;
+                console.log(options, "OPTIIIIIIS");
+                console.log(orderable.options, "OPTIS2");
+                console.log(orderable.options.length, options.length, "LEN");
                 let invalid = false;
                 for (let i = 0; i < orderable.options.length; i++) {
                     let found = false;
@@ -61,7 +64,8 @@ addToBox = (request, response) => {
                     }
                     else {
                         for (let j = 0; j < options.length; j++) {
-                            if ((i + 1) == options[j].item_id && orderable.options[i] == options[j].option_name) {
+                            console.log((i + 1), options[j].item_id, orderable.options[i], options[j].option_name);
+                            if (orderable.options[i] === options[j].option_name) {
                                 found = true;
                                 break;
                             }
